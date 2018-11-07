@@ -1,0 +1,46 @@
+html, body {
+	display: -webkit-flex;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	height: 100%;
+}
+.content-container {
+	flex: 1;
+}
+
+.right-pagination >.pagination {
+	  justify-content: flex-end;
+}
+
+.center-pagination >.pagination {
+	  justify-content: center;
+}
+.table td, .table th {
+	padding: 0.5rem 0.75rem;
+}
+
+.line-check-group {
+	margin: 1rem auto;
+}
+.line-check {
+	display: inline-block;
+	margin: 0.2rem;
+	border: 1px solid #cccccc;
+	border-radius: 1rem;
+	overflow: hidden;
+}
+.line-check.active {
+	background: #dddddd;
+}
+.line-check input {
+	display: none;
+}
+.line-check>.line-check-label {
+	margin-bottom: 0;
+	padding: 0 .8rem;
+}
+.line-check>.line-check-label:hover {
+	cursor: pointer;
+	background: #dddddd;
+}

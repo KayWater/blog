@@ -1,0 +1,70 @@
+
+
+.navbar {
+	border: 1px solid #cccccc;
+	margin: 0;
+}
+.main {
+	flex: 1;
+	display: flex;
+	width: 100%;
+	height: 100%;
+}
+
+.aside-md {
+	width: 180px;
+	height: 100%;
+	border-right: 1px solid #cccccc;
+}
+.aside-nav{
+	
+}
+.aside-nav .nav-item>a{
+	border-top: 0;
+	border-bottom: 1px;
+	border-right: 0;
+	border-left: 0;
+	border-style: solid;
+	border-color: #cccccc;
+	color: #010101;
+	cursor: pointer;
+	background-color: initial;
+}
+.aside-nav .nav-item>a:hover{
+	color: #000000;
+	background-color: #cccccc;
+}
+.aside-nav .nav-item>a>.icon{
+	position: relative;
+	display: inline-block;
+	margin-top: -10px;
+	margin-right: 10px;
+	margin-bottom: -10px;
+	margin-left: -15px;
+	width: 40px;
+	line-height: 40px;
+	text-align: center;
+}
+
+.aside-nav>.active{
+	background-color: #080808;
+}
+.aside-nav .sub-nav>.active>a{
+	color: #fff;
+}
+
+.content-container {
+	padding-top: 15px;
+	width: 100%;
+	hight: 100%;
+}
+
+.tag-input-container {
+	display: none;
+	
+}
+
+
+.form-check-inline {
+	margin-top: 0.5rem;
+}
