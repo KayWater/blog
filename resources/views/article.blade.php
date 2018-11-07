@@ -26,8 +26,11 @@
   	</div>
   </section>
   <section class="container">
-   <!--PC和WAP自适应版-->
-<div id="SOHUCS" sid="{{ $article->id }}" ></div> 
+
+   <div id="cyReward" role="cylabs" data-use="reward"></div>
+<script type="text/javascript" charset="utf-8" src="https://changyan.itc.cn/js/lib/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="https://changyan.sohu.com/js/changyan.labs.https.js?appid=cysTHKVjG"></script>
+<div id="SOHUCS" sid="{{ $article->id }}" ></div>
 <script type="text/javascript"> 
 (function(){ 
 var appid = 'cysTHKVjG'; 

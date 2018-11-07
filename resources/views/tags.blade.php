@@ -6,7 +6,7 @@
 @endsection
 
 @section("content")
-  <section class="container">
+  <section class="container mt-3">
     @foreach($tags as $tag)
       <a class="btn btn-outline-secondary" role="button" 
         href='{{url("article/tag/$tag->id")}}'>{{$tag->name}}</a>

@@ -13,7 +13,7 @@
           <h4 class="card-title ">
             <a class="text-dark" href='{{url("/article/$article->id")}}'>{{$article->title}}</a>
           </h4>
-          {!! $article->content !!}
+          
           @foreach($article->tags as $key => $tag)
           <a class="btn btn-sm btn-outline-secondary card-link" href='{{url("/article/tag/$tag->id")}}'>
             <span class="fa fa-tag"></span>&nbsp;&nbsp;{{$tag->name}}
