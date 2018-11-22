@@ -75,40 +75,6 @@ class TagController extends Controller
         }
     }
     
-//     public function store(Request $request)
-//     {
-//         $rules = [
-//             'id' => 'required|integer',
-//             'tagName' => "required|string|between:2,12",
-//             'status' => "integer",
-//         ];
-//         $messages = [
-//             'id.required' => "非法请求",
-//             'id.integer' => "非法请求",
-//             'tagName.required' => "标签名称不能为空",
-//             'tagName.string' => "标签名称只能为字符串",
-//             'tagName.between' => "标签名称只能包含2~12位字符",
-//             'status.integer' => "状态只能为整数"
-//         ];
-//         $validator = Validator::make($request->all(), $rules, $messages);
-        
-//         if($validator->fails())
-//         {
-//             $errors = $validator->errors();
-//             return response()->json([
-//                 'errorCode' => 1,
-//                 'errorMsg' => $errors,
-//             ]);
-//         }
-        
-//         $id = $request->input("id");
-//         $tag = Tag::findOrNew($id);
-//         $tag->name = $request->input('tagName');
-//         $tag->status = $request->input('status') == 0 ? 0 : 1;      
-//         $result = $tag->save();
-   
-//     }
-    
     /**
      * update tag
      * @param Request $request

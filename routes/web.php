@@ -34,11 +34,12 @@ Route::middleware(['auth','isAdmin'])->namespace('Admin')->group(function () {
    Route::get('/admin/article','ArticleController@index');
    Route::get('/admin/draft', 'DraftController@index');
    
-   Route::get('/admin/login', 'LoginController@showLoginForm');
-   Route::post('/admin/login', 'LoginController@login'); 
    Route::post('/editor/upload', 'EditorController@upload');
 });
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('auth/weibo', 'Auth\SocialiteController@weibo');
+Route::get('auth/sina', 'Auth\SocialiteController@callback');
