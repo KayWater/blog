@@ -5,7 +5,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 
-use App\Article;
+use App\SocialiteUser;
 
 class SocialiteController extends Controller
 {
@@ -18,24 +18,46 @@ class SocialiteController extends Controller
         
     }
     
-    public function weibo()
+    /**
+     * redirect to socialite auth url
+     * @param String $driver
+     * @return void
+     */
+    public function redirectToProvider($driver)
     {
-        return Socialite::with('weibo')->redirect();    
+        return Socialite::driver($driver)->redirect();
     }
     
-    public function callback()
+    /**
+     * handle socialite callback
+     * @param String $driver
+     * @return void
+     */
+    public function handleCallback($driver)
     {
-        $oauthUser = Socialite::with('weibo')->user();
+        $user = Socialite::driver($driver)->user();
         
-
-        Auth::login($oauthUser);
-        return view("welcome");
-//         dd($oauthUser);
-//         var_dump($oauthUser->getId());
-//         var_dump($oauthUser->getNickname());
-//         var_dump($oauthUser->getName());
-//         var_dump($oauthUser->getEmail());
-//         var_dump($oauthUser->getAvatar());
+        $attributes = [
+            'socialite_id' => $user->id,
+            'driver' => $driver,
+        ];
+        $values = [
+            'socialite_id' => $user->id,
+            'driver' => $driver,
+            'nickname' => $user->nickname,
+            'name' => $user->name,
+            'email' => $user->email,
+            'avatar' => $user->avatar,
+            'token' => $user->token,
+            'refresh_token' => $user->refreshToken,
+            'expires_in' => $user->expiresIn,
+        ];
+        
+        $socialiteUser = SocialiteUser::firstOrNew($attributes, $values);
+        $socialiteUser->save();
+      
+        Auth::guard('socialite')->login($socialiteUser);
+        
+        return redirect("/");
     }
-   
 }

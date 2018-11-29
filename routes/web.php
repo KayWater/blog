@@ -41,5 +41,9 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('auth/provider/{driver}', 'Auth\SocialiteController@redirectToProvider');
+Route::get('auth/callback/{driver}', 'Auth\SocialiteController@handleCallback');
+
+
 Route::get('auth/weibo', 'Auth\SocialiteController@weibo');
 Route::get('auth/sina', 'Auth\SocialiteController@callback');

@@ -22,20 +22,16 @@
       </form>
       <!-- Authentication Links -->
       <ul class="navbar-nav ml-auto">
-      @guest
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('login') }}">{{ __('登录') }}</a>
-        </li>
-        <li class="nav-item">
-        @if (Route::has('register'))
-          <a class="nav-link" href="{{ route('register') }}">{{ __('注册') }}</a>
-        @endif
-        </li>
-      @else
+      @if(Auth::check() || Auth::guard('socialite')->check())
         <li class="nav-item dropdown">
           <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" 
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-            {{ Auth::user()->name }} <span class="caret"></span>
+            @if(Auth::check()) 
+              {{ Auth::user()->name }}
+            @elseif(Auth::guard('socialite')->check())
+              {{  Auth::guard('socialite')->user()->nickname }}
+            @endif
+            <span class="caret"></span>
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" href="{{ route('logout') }}"
@@ -50,7 +46,16 @@
             </form>
           </div>
         </li>
-      @endguest
+      @else
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('login') }}">{{ __('登录') }}</a>
+        </li>
+        <li class="nav-item">
+        @if (Route::has('register'))
+          <a class="nav-link" href="{{ route('register') }}">{{ __('注册') }}</a>
+        @endif
+        </li>
+      @endif
     </ul>
   </div>
 </nav>

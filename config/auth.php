@@ -46,6 +46,10 @@ return [
             'provider' => 'users',
         ],
         
+        'socialite' => [
+            'driver' => 'session',
+            'provider' => 'socialites'
+        ],
     ],
 
     /*
@@ -75,6 +79,11 @@ return [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
+        
+        'socialites' => [
+            'driver' => 'eloquent',
+            'model' => App\SocialiteUser::class,
+        ],
     ],
 
     /*
