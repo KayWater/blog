@@ -73,7 +73,7 @@
                         	<div class="col-md-6 offset-md-4">
                         	  <h6 class="text-center socialite-splitter">社交账号登录</h6>
                         	  <div class="socialite-container d-flex justify-content-around">
-                            	  <a class="d-inline-block" href="{{ url('auth/provider/weibo') }}">
+                            	  <a class="d-inline-block weibo-icon" href="{{ url('auth/provider/weibo') }}">
                             	    <span class="fa fa-weibo fa-2x"></span>
                             	  </a>
                         	  </div>

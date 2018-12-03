@@ -24,6 +24,8 @@ Route::get('article/tag/{id}', 'ArticleController@tag');
 
 Route::middleware(['auth','isAdmin'])->namespace('Admin')->group(function () {
    Route::get('/dashboard', 'HomeController@index')->name('dashboard');
+   Route::get('/admin/user/local', 'Usercontroller@local');
+   Route::get('/admin/user/socialite', 'Usercontroller@socialite');
    Route::get('/admin/tags', 'TagController@index');
    Route::post('/admin/tags', 'TagController@store');
    Route::post('/admin/tags/update', 'TagController@update');
