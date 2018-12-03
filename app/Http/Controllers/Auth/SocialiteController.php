@@ -52,12 +52,12 @@ class SocialiteController extends Controller
             'refresh_token' => $user->refreshToken,
             'expires_in' => $user->expiresIn,
         ];
-        
+        //find the socialite user, create it when not found
         $socialiteUser = SocialiteUser::firstOrNew($attributes, $values);
         $socialiteUser->save();
       
         Auth::guard('socialite')->login($socialiteUser);
-        
+
         return redirect("/");
     }
 }

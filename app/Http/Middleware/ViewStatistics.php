@@ -29,7 +29,7 @@ class ViewStatistics
             $fingerprint = $request->fingerprint();
             if(!Redis::exists($fingerprint))
             {
-                //cache the fingerpring 60*6 seconds
+                //cache the fingerpring which expires in 60*6 seconds
                 Redis::setex($fingerprint, 60*6, $request->getClientIp());
                 //dispatch the job
                 StatisticsArticleView::dispatch($response->getOriginalContent()->article)
