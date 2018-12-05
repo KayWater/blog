@@ -21,7 +21,7 @@ Route::get('archive', 'HomeController@archive');
 Route::get('article/{id}', 'ArticleController@show')->middleware("viewStatistics");
 Route::get('article/tag/{id}', 'ArticleController@tag');
 
-
+//admin route
 Route::middleware(['auth','isAdmin'])->namespace('Admin')->group(function () {
    Route::get('/dashboard', 'HomeController@index')->name('dashboard');
    Route::get('/admin/user/local', 'Usercontroller@local');
@@ -43,9 +43,9 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+//socialite auth
 Route::get('auth/provider/{driver}', 'Auth\SocialiteController@redirectToProvider');
 Route::get('auth/callback/{driver}', 'Auth\SocialiteController@handleCallback');
 
-
-Route::get('auth/weibo', 'Auth\SocialiteController@weibo');
-Route::get('auth/sina', 'Auth\SocialiteController@callback');
+//statistics 
+Route::get('statistics/userSource', 'StatisticsController@userSource');
