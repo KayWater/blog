@@ -18,7 +18,6 @@
           <tr>
             <th scope="col">#</th>
             <th scope="col">名称</th>
-            <th scope="col">标签</th>
             <th scope="col">创建于</th>
             <th scope="col">更新于</th>
             <th scope="col">操作</th>

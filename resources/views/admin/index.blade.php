@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @push('scripts')
-  <script src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>
+  <script src="https://cdn.bootcss.com/highcharts/7.0.1/highcharts.js"></script>
   <script src='{{ asset("js/statistics.js") }}'></script>
 @endpush
 

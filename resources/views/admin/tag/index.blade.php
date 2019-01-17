@@ -25,13 +25,13 @@
         <tbody>
           @foreach( $tags as $key => $tag )
           <tr>
-            <th scope="row">{{$key+1}}</th>
-            <td class="tag-name">{{$tag->name}}</td>
+            <th scope="row">{{ $key+1 }}</th>
+            <td class="tag-name">{{ $tag->name }}</td>
             <td>
               <div class="switch" >
                 <input class="bootstrap-switch tag-status-switch" data-on-color="success" 
                 data-off-color="info" data-tag-id="{{$tag->id}}" name="tagStatus" 
-                type="checkbox" data-size="mini" {{$tag->status ? "checked" : ""}} />
+                type="checkbox" data-size="mini" {{ $tag->status ? "checked" : "" }} />
               </div>
             </td>
             <td>
@@ -45,7 +45,7 @@
         </tbody>
       </table>
       <nav class="page-nav right-pagination " role="Pagination" >
-      {{$tags->links()}}
+      {{ $tags->links() }}
       </nav>
     </section>
     <section>

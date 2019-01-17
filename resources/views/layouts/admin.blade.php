@@ -26,8 +26,8 @@
          
         <!-- 最新的 Bootstrap4 核心 JavaScript 文件 -->
         <script src="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/js/bootstrap.min.js"></script>
-<!--         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/4.0.0-alpha.1/js/bootstrap-switch.min.js"></script> -->
-		<script type="text/javascript" src="{{ asset('js/plugins/bootstrap-switch/js/bootstrap-switch.js') }}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/4.0.0-alpha.1/js/bootstrap-switch.min.js"></script>
+<!-- 		<script type="text/javascript" src="{{ asset('js/plugins/bootstrap-switch/js/bootstrap-switch.js') }}"></script> -->
 
         @stack('scripts')
     </head>

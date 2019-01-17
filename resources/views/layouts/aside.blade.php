@@ -3,15 +3,15 @@
   <ul class="nav flex-column aside-nav">
     <li class="nav-item ff-dropdown" data-module="user">
 	  <a class="ff-dropdown-toggle nav-link" data-toggle="collapse" role="button" 
-	  href="#multiCollapseExample1" aria-expanded="true" aria-controls="multiCollapseExample1" id="submenu2">
-		<span class="icon"><span class="fa fa-book"></span></span>
+	  href="#multiCollapseExample1" aria-expanded="true" aria-controls="multiCollapseExample1" id="submenu1">
+		<span class="icon"><span class="fa fa-users"></span></span>
 		<span>用户管理</span>
 		<span class="pull-right">
 		  <span class="fa fa-angle-down toggle-fa"></span>
 		  <span class="fa fa-angle-up toggle-fa d-none "></span>
 		</span>
 	  </a>
-	  <ul class="nav nav-fill sub-nav ff-dropdown-menu collapse" id="multiCollapseExample1" data-labelledby="submenu2">
+	  <ul class="nav nav-fill sub-nav ff-dropdown-menu collapse" id="multiCollapseExample1" data-labelledby="submenu1">
 		<li class="nav-item" data-page="local">
 		  <a class="nav-link" href='{{url("/admin/user/local")}}'>
 			<span class="icon"><span class="fa fa-angle-right"></span></span>
@@ -27,7 +27,8 @@
 	  </ul>
 	</li>
 	<li class="nav-item ff-dropdown" data-module="article">
-	  <a class="ff-dropdown-toggle nav-link" data-toggle="ff-dropdown" id="submenu2">
+	  <a class="ff-dropdown-toggle nav-link" data-toggle="collapse" role="button"
+	  href="#articleCollapse" aria-expanded="true" aria-controls="articleCollapse" id="submenu2">
 		<span class="icon"><span class="fa fa-book"></span></span>
 		<span>文章管理</span>
 		<span class="pull-right">
@@ -35,7 +36,7 @@
 		  <span class="fa fa-angle-up toggle-fa d-none "></span>
 		</span>
 	  </a>
-	  <ul class="nav nav-fill sub-nav ff-dropdown-menu" data-labelledby="submenu2">
+	  <ul class="nav nav-fill sub-nav ff-dropdown-menu collapse" id="articleCollapse" data-labelledby="submenu2">
 		<li class="nav-item" data-page="write">
 		  <a class="nav-link" href='{{url("/admin/article/edit")}}'>
 			<span class="icon"><span class="fa fa-angle-right"></span></span>

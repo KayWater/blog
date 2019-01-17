@@ -8,11 +8,10 @@
 
 @section("header")
 @include("layouts.navbar")
-@include('layouts.jumbotron')
 @endsection
 
 @section("content")
-  <section class="container">
+  <section class="container mt-4">
   	<h3 class="text-center">{{$article->title}}</h3>
   	<div class="text-center">
   	@foreach($article->tags as $key => $tag)
