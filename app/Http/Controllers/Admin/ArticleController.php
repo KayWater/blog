@@ -41,18 +41,29 @@ class ArticleController extends Controller
     {
         $tags = Tag::all();
         $drafts = Draft::all();
-        if($id) {
-            $article = Article::with('tags:tags.id')->findOrFail($id);
+        
+        if($id == null) {
+            return view("admin.article.edit", [
+                'tags' => $tags,
+                'drafts' => $drafts,
+            ]);
+        }
+        
+        $article = Article::with('tags:tags.id')->find($id);
+        if($article == null) {
+            $draft =  Draft::findOrFail($id);
+            return view("admin.article.edit", [
+                'tags' => $tags,
+                'drafts' => $drafts,
+                'draft' => $draft,
+            ]);
+        } else {
             return view("admin.article.edit", [
                 'tags' => $tags,
                 'drafts' => $drafts,
                 'article' => $article,
             ]);
         }
-        return view("admin.article.edit", [
-            'tags' => $tags, 
-            'drafts' => $drafts
-        ]);
     }
     
     /**
@@ -86,7 +97,7 @@ class ArticleController extends Controller
         }
         
         $id = $request->input("id");
-        $draft = Draft::findOrNew($id);
+        $draft = Draft::withTrashed()->findOrNew($id);
         $draft->title = $request->input('title');
         $draft->content = $request->input('content');
         $result = $draft->save();

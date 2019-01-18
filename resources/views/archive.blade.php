@@ -7,6 +7,9 @@
 
 @section("content")
     <section class="container">
+      @foreach($years as $year)
+      	{{ $year }}
+      @endforeach
       @foreach($articles as $key => $article)
       <div class="card article-card">
         <div class="card-body">

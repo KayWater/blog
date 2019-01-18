@@ -59,7 +59,8 @@ class HomeController extends Controller
         //DB::enableQueryLog();
         $years = Article::select('published_at')->get()->map(function($item, $key) {
             return $item->published_at->format("Y");
-        })->unique();
+        });
+        dd($years);
         //dd(DB::getQueryLog());
         $articles = Article::with(["tags" => function($query) {
             $query->where('status', 1);
