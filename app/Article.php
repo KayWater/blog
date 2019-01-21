@@ -15,6 +15,15 @@ class Article extends Model
     protected $dates = ['deleted_at', 'published_at'];
     
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'draft_id',
+    ];
+    
+    /**
      * tag relate
      * 
      */

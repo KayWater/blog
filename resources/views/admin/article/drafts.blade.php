@@ -31,7 +31,7 @@
             <td>{{ $draft->created_at }}</td>
             <td>{{ $draft->updated_at }}</td>
             <td>
-              <a class="btn btn-sm btn-link" href='{{ url("/admin/article/edit/$draft->id") }}'>
+              <a class="btn btn-sm btn-link" href='{{ url("/admin/draft/edit/$draft->id") }}'>
                 <span class="fa fa-pencil-square-o text-dark"></span>
               </a>
             </td>

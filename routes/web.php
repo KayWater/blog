@@ -30,12 +30,12 @@ Route::middleware(['auth','isAdmin'])->namespace('Admin')->group(function () {
    Route::post('/admin/tags', 'TagController@store');
    Route::post('/admin/tags/update', 'TagController@update');
    Route::get("/admin/article/edit/{id?}", "ArticleController@edit");
-   Route::post('/admin/article/prestore', 'ArticleController@prestore');
+   
    Route::post("/admin/article/store", 'ArticleController@store');
-   Route::get("/admin/article/draft/{id}", 'ArticleController@draft');
    Route::get('/admin/article','ArticleController@index');
    Route::get('/admin/draft', 'DraftController@index');
-   
+   Route::get('/admin/draft/edit/{id?}', 'DraftController@edit');
+   Route::post('/admin/draft/prestore', 'DraftController@prestore');
    Route::post('/editor/upload', 'EditorController@upload');
 });
 

@@ -42,7 +42,7 @@
           <ul class="nav flex-column draft-nav">
           @if(isset($article))
             <li class="nav-item active">
-              <a class="nav-link" href='{{url("/admin/article/draft/{$article->draft_id}")}}'>
+              <a class="nav-link" href='{{url("/admin/article/edit/{$article->draft_id}")}}'>
                 <p class="draft-title">{{$article->title}}</p>
                 <p class="draft-time">更新于：{{$article->updated_at}}</p>
               </a>
@@ -50,7 +50,7 @@
           @endif
           @foreach($drafts as $index => $currentDraft)
              <li class="nav-item {{isset($draft) && $currentDraft->id == $draft->id ? 'active' : ''}}">
-               <a class="nav-link" href='{{url("/admin/article/draft/{$currentDraft->id}")}}'>
+               <a class="nav-link" href='{{url("/admin/draft/edit/{$currentDraft->id}")}}'>
                  <p class="draft-title">{{$currentDraft->title ? $currentDraft->title : "无标题草稿"}}</p>
                  <p class="draft-time">更新于：{{$currentDraft->updated_at}}</p>
                </a>
@@ -120,6 +120,11 @@
                 <input name="tags" id="tag{{$tag->id}}" type="checkbox" value="{{$tag->id}}" checked>
                 <label class="line-check-label" for="tag{{$tag->id}}">{{$tag->name}}</label>
               </div>
+              @elseif(isset($draft->tags) && $draft->tags->contains("id",  $tag->id))
+              <div class="check-item line-check active">
+                <input name="tags" id="tag{{$tag->id}}" type="checkbox" value="{{$tag->id}}" checked>
+                <label class="line-check-label" for="tag{{$tag->id}}">{{$tag->name}}</label>
+              </div> 
               @else
               <div class="check-item line-check">
                 <input name="tags" id="tag{{$tag->id}}" type="checkbox" value="{{$tag->id}}">

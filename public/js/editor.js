@@ -70,7 +70,7 @@ $(document).ready(function(){
     			var title = $("#title").val();
     			if(data != preEditorData) {
     				$.ajax({
-    					url: "/admin/article/prestore",
+    					url: "/admin/draft/prestore",
     					type: "POST",
     					data: {
     						_token: _token,
@@ -85,7 +85,7 @@ $(document).ready(function(){
 	        					if(!id) {
 	        						var navHtml = "<li class=\"nav-item active\">" +
 	        							"<a class=\"nav-link\" " +
-	        							"href=\"/admin/article/draft/"+res.data.draftId+"\">" +
+	        							"href=\"/admin/draft/edit/"+res.data.draftId+"\">" +
 	        								"<p class=\"draft-title\">"+title+"</p>" +
 	        								"<p class=\"draft-time\">更新于："+res.data.updatedAt+"</p>" +
 	        							"</a></li>";

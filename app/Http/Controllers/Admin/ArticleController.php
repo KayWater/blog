@@ -35,6 +35,7 @@ class ArticleController extends Controller
     /**
      * article edit 
      * @param Request $request
+     * @param Integer $id
      * @return void
      */
     public function edit(Request $request, $id=null)
@@ -48,95 +49,15 @@ class ArticleController extends Controller
                 'drafts' => $drafts,
             ]);
         }
-        
-        $article = Article::with('tags:tags.id')->find($id);
-        if($article == null) {
-            $draft =  Draft::findOrFail($id);
-            return view("admin.article.edit", [
-                'tags' => $tags,
-                'drafts' => $drafts,
-                'draft' => $draft,
-            ]);
-        } else {
-            return view("admin.article.edit", [
-                'tags' => $tags,
-                'drafts' => $drafts,
-                'article' => $article,
-            ]);
-        }
-    }
-    
-    /**
-     * save as draft
-     * @param Request $request
-     * @return void
-     */
-    public function prestore(Request $request)
-    {
-        //validator settings
-        $rules = [
-            'id' => "required|integer",
-            "title" => "nullable|string|between:1, 24",
-        ];
-        $messages = [
-            'id.required' => "错误请求",
-            'id.integer' => "错误请求",
-            'title.string' => "标题必须为字符串",
-            'title.between' => "标题为1~24位字符",
-        ];
-        $validator = Validator::make($request->all(), $rules, $messages);
-        
-        //something wrong in validator
-        if($validator->fails())
-        {
-            $errors = $validator->errors();
-            return response()->json([
-                'errorCode' => 1,
-                'errorMsg' => $errors
-            ]);
-        }
-        
-        $id = $request->input("id");
-        $draft = Draft::withTrashed()->findOrNew($id);
-        $draft->title = $request->input('title');
-        $draft->content = $request->input('content');
-        $result = $draft->save();
-        if($result === true)
-        {
-            return response()->json([
-                'errorCode' => 0,
-                'errorMsg' => "OK",
-                'data' => [
-                    'draftId' => $draft->id,
-                    'updatedAt' => $draft->updated_at->format("Y-m-d H:i:s"),
-                ],
-            ]);
-        }
-        else 
-        {
-            return response()->json([
-                'errorCode' => 1,
-                'errorMsg' => "服务器内部错误",
-            ]); 
-        }
-    }
-    
-    /**
-     * draft
-     * @param Request $request
-     * @return void
-     */
-    public function draft(Request $request, $id)
-    {
-        $draft = Draft::findOrFail($id);
-        $drafts = Draft::all();
-        $tags = Tag::all();
+        $article = Article::with('tags:tags.id')->findOrFail($id);
         return view("admin.article.edit", [
-            'draft' => $draft,
-            'drafts' => $drafts,
             'tags' => $tags,
+            'drafts' => $drafts,
+            'article' => $article,
         ]);
     }
+    
+
     
     /**
      * store as published article
@@ -173,13 +94,13 @@ class ArticleController extends Controller
                 'errorMsg' => $errors
             ]);
         }
-        
+        $draft_id = $request->input('draftId');
+        $article = Article::firstOrNew(['draft_id' => $draft_id]);
         $id = $request->input("id");
-        $article = Article::findOrNew($id);
         $article->title = $request->input("title");
         $article->content = $request->input("content");
         $article->draft_id = $request->input("draftId");
-        $article->published_at = date("Y-m-d H:i:s");
+        $article->published_at = $article->published_at ? $article->published_at : date("Y-m-d H:i:s");
         $result = $article->save();
         
         $article->tags()->sync($request->input("tags"));
