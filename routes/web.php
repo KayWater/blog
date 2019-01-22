@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\HomeController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,6 +18,7 @@ Route::get('/', 'HomeController@index');
 Route::get('article', 'HomeController@index');
 Route::get('tags', 'HomeController@tags');
 Route::get('archive', 'HomeController@archive');
+Route::get('archive/{year}', 'HomeController@archive');
 
 
 Route::get('article/{id}', 'ArticleController@show')->middleware("viewStatistics");
@@ -24,13 +27,15 @@ Route::get('article/tag/{id}', 'ArticleController@tag');
 //admin route
 Route::middleware(['auth','isAdmin'])->namespace('Admin')->group(function () {
    Route::get('/dashboard', 'HomeController@index')->name('dashboard');
+   
    Route::get('/admin/user/local', 'UserController@local');
    Route::get('/admin/user/socialite', 'UserController@socialite');
+   
    Route::get('/admin/tags', 'TagController@index');
    Route::post('/admin/tags', 'TagController@store');
    Route::post('/admin/tags/update', 'TagController@update');
-   Route::get("/admin/article/edit/{id?}", "ArticleController@edit");
    
+   Route::get("/admin/article/edit/{id?}", "ArticleController@edit");
    Route::post("/admin/article/store", 'ArticleController@store');
    Route::get('/admin/article','ArticleController@index');
    Route::get('/admin/draft', 'DraftController@index');

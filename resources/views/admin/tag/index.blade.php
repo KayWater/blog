@@ -19,6 +19,7 @@
             <th scope="col">#</th>
             <th scope="col">名称</th>
             <th scope="col">状态</th>
+            <th scope="col">热度</th>
             <th scope="col">操作</th>
           </tr>
         </thead>
@@ -34,6 +35,7 @@
                 type="checkbox" data-size="mini" {{ $tag->status ? "checked" : "" }} />
               </div>
             </td>
+            <td>{{ $tag->articles_count }}</td>
             <td>
               <button class="btn btn-sm btn-link tag-edit-btn" data-tag-id="{{$tag->id}}" 
               data-control='tagForm' type="button" >

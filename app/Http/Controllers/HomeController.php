@@ -30,7 +30,7 @@ class HomeController extends Controller
         //$articles = Article::with('tags')->paginate(8);
         $articles = Article::with(['tags' => function($query){
             $query->where('status', 1);
-        }])->paginate(8);
+        }])->orderBy('published_at', 'desc')->paginate(8);
         return view("index", [
             'articles' => $articles,
         ]);
@@ -52,20 +52,31 @@ class HomeController extends Controller
     /**
      * article archive
      * @param Request $request
+     * @param String $year
      * @return 
      */
-    public function archive(Request $request)
+    public function archive(Request $request, $year=null)
     {
-        //DB::enableQueryLog();
-        $years = Article::select('published_at')->get()->map(function($item, $key) {
-            return $item->published_at->format("Y");
-        });
-        dd($years);
-        //dd(DB::getQueryLog());
-        $articles = Article::with(["tags" => function($query) {
-            $query->where('status', 1);
-        }])->paginate(8);
-        
+        #DB::enableQueryLog();
+//         $years = Article::select('published_at')->get()->groupBy(function ($item, $key) {
+//             return $item->published_at->format("Y");
+//         })->map(function ($item, $key) {
+//             return $item[$key] = count($item);
+//         });
+        $years = Article::select(DB::raw('date_format(published_at, "%Y") as year'), 
+            DB::raw('count(*) as total'))->groupBy('year')->orderBy('year', 'desc')->get();
+        #dd(DB::getQueryLog());
+        if($year==null) {
+            $articles = Article::with(["tags" => function($query) {
+                $query->where('status', 1);
+            }])->orderBy('published_at', 'desc')->paginate(8);
+        } else {
+            $articles = Article::with(["tags" => function($query) {
+                $query->where('status', 1);
+            }])->where(Db::raw('date_format(published_at, "%Y")'), $year)
+            ->orderBy('published_at', 'desc')->paginate(8);
+        }
+
         return view('archive', [
             'years' => $years,
             'articles' => $articles,

@@ -23,8 +23,8 @@ class TagController extends Controller
      */
     public function index()
     {
-        $tags = Tag::paginate(8);
-       
+        $tags = Tag::withCount('articles')->paginate(8);
+        
         return view("admin.tag.index", ['tags' => $tags]);
     }
     

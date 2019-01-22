@@ -23,7 +23,7 @@ class StatisticsController extends Controller
     /**
      * statistics user source
      * @param Request $request
-     * @return json
+     * @return JSON
      */
     public function userSource()
     {
