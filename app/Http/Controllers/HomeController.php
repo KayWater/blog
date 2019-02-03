@@ -27,10 +27,10 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        //$articles = Article::with('tags')->paginate(8);
         $articles = Article::with(['tags' => function($query){
             $query->where('status', 1);
         }])->orderBy('published_at', 'desc')->paginate(8);
+        
         return view("index", [
             'articles' => $articles,
         ]);
@@ -63,6 +63,7 @@ class HomeController extends Controller
 //         })->map(function ($item, $key) {
 //             return $item[$key] = count($item);
 //         });
+        # 文章按年分组统计
         $years = Article::select(DB::raw('date_format(published_at, "%Y") as year'), 
             DB::raw('count(*) as total'))->groupBy('year')->orderBy('year', 'desc')->get();
         #dd(DB::getQueryLog());
@@ -82,4 +83,6 @@ class HomeController extends Controller
             'articles' => $articles,
         ]);
     }
+    
+ 
 }

@@ -51,4 +51,18 @@ class ArticleController extends Controller
             'articles' => $articles,
         ]);
     }
+    /**
+     * search articles
+     * @param Request $request
+     * @param String $search
+     * @return void
+     */
+    public function search(Request $request, $search="")
+    {
+        $search = $request->input('search');
+        $articles = Article::search($search)->paginate(8);
+        return view("index", [
+            'articles' => $articles,
+        ]);
+    }
 }

@@ -34,7 +34,6 @@ $(document).ready(function(){
 	
 	//提交标签
 	$("#tagForm").find("#save").click(function(evt) {
-		console.log("test");
 		$("#tagForm").validate({
 			focusInvalid: false,
 			onfocusout: false,

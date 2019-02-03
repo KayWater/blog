@@ -151,7 +151,9 @@ return [
          * Package Service Providers...
          */
         \Torann\GeoIP\GeoIPServiceProvider::class,
-        SocialiteProviders\Manager\ServiceProvider::class, 
+        SocialiteProviders\Manager\ServiceProvider::class,
+        Laravel\Scout\ScoutServiceProvider::class,
+        ScoutEngines\Elasticsearch\ElasticsearchProvider::class,
         
         /*
          * Application Service Providers...

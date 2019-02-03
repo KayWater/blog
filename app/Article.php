@@ -4,11 +4,13 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Scout\Searchable;
 
 class Article extends Model
 {
     //
     use SoftDeletes;
+    use Searchable;
     /**
      * 需要转换成日期的属性
      */
@@ -22,6 +24,16 @@ class Article extends Model
     protected $fillable = [
         'draft_id',
     ];
+    
+    /**
+     * 获取模型的可搜索数据
+     * 
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        return $this->only('title', 'content');
+    }
     
     /**
      * tag relate

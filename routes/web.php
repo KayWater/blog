@@ -15,14 +15,17 @@ use App\Http\Controllers\HomeController;
 
 Route::get('/', 'HomeController@index');
 
+
 Route::get('article', 'HomeController@index');
 Route::get('tags', 'HomeController@tags');
 Route::get('archive', 'HomeController@archive');
 Route::get('archive/{year}', 'HomeController@archive');
 
 
+Route::get('article/search', 'ArticleController@search');
 Route::get('article/{id}', 'ArticleController@show')->middleware("viewStatistics");
 Route::get('article/tag/{id}', 'ArticleController@tag');
+
 
 //admin route
 Route::middleware(['auth','isAdmin'])->namespace('Admin')->group(function () {
