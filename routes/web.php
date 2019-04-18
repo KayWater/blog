@@ -15,6 +15,7 @@ use App\Http\Controllers\HomeController;
 
 Route::get('/', 'HomeController@index');
 
+Route::get("/test", "HomeController@test");
 
 Route::get('article', 'HomeController@index');
 Route::get('tags', 'HomeController@tags');
