@@ -1,11 +1,11 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 use App\Article;
 use App\Tag;
-use DB;
 use App\Events\ArticleView;
 
 class ArticleController extends Controller
@@ -29,6 +29,7 @@ class ArticleController extends Controller
     {
         $article = Article::findOrFail($id);
         //event(new ArticleView($article));
+        
         return view("article", [
             'article' => $article,
         ]);
@@ -47,8 +48,16 @@ class ArticleController extends Controller
             $articles = $query->with('tags')->paginate(6);
         }])->find($id);
         
+        $years = Article::select(
+            DB::raw('date_format(published_at, "%Y") as year'),
+            DB::raw('count(*) as total')
+            )->groupBy('year')->orderBy('year', 'desc')->get();
+        $tags = Tag::all();
+            
         return view("index", [
             'articles' => $articles,
+            'years' => $years,
+            'tags' => $tags,
         ]);
     }
     /**

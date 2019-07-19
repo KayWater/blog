@@ -1,8 +1,8 @@
 @extends('layouts.admin')
 
 @push("scripts")
-  <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/jquery.validate.min.js"></script>
-  <script src="{{asset('js/admin.js')}}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/jquery.validate.min.js" defer></script>
+  <script src="{{asset('js/admin.js')}}" defer></script>
    
 @endpush
 
@@ -51,7 +51,6 @@
       </nav>
     </section>
     <section>
-      <row>
       	<div class="col-md-3">
           <section class="card ">
             <h5 class="card-header">添加|修改标签</h5>
@@ -82,7 +81,6 @@
             </div>
           </section>
         </div>
-      </row>
     </section>
   </section>
 

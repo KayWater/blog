@@ -15,7 +15,12 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+import constants from './components/Constants.vue';
+
+Vue.prototype.CONSTANTS = constants;
+
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
+Vue.component('comment-editor', require('./components/CommentEditorComponent.vue').default);
 
 const app = new Vue({
     el: '#app'

@@ -1,7 +1,6 @@
 $(document).ready(function(){
 	//搜索
 	$("#searchForm").find("#save").click(function(evt) {
-		console.log("tst")
 		$("#searchForm").validate({
 			focusInvalid: false,
 			onfocusout: false,
