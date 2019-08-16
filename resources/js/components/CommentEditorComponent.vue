@@ -17,59 +17,59 @@
 <script>
 import { default as classicEditor } from '../ckeditor.js'
 
-    export default {
-        mounted() {
-            console.log('Component mounted.')
-            ClassicEditor
-                .create( document.querySelector( '#commentEditor' ), {
-                    toolbar: {},
-                    mention: {
-                        feeds: [
-                            {
-                                marker: '@',
-                                // Define feed items callback
-                                feed: this.getFeedItems,
-                                // Define the custom item renderer
-                                //itemRenderer: customItemRenderer,
-                                minimumCharacters: 1
-                            }
-                        ]
-                    }
-                }).then( newEditor => {
-                    editor = newEditor;
-                    console.log('test');
-        //            editor.plugins.get('FileRepository').createUploadAdapter = (loader)=>{
-        //                return new MyUploadAdapter(loader);
-        //            };
-                    // List of plugins
-                    // ClassicEditor.builtinPlugins.map( plugin => plugin.pluginName );
-                    // toolbar items
-                    // Array.from( editor.ui.componentFactory.names() );
-                    handleCommentButton( editor );
-                }).catch( error => {
-                    console.log( error );
-                });
-        },
-        methods: {
-            getFeedItems(queryText) {
-                return new Promise( resolve => {
-                    let url = "/api/user/search?key=" + queryText;
-                    
-                    const xhr = new XMLHttpRequest();
-                    xhr.open('GET', url);
-                    xhr.responseType = 'json';
-                    xhr.addEventListener('load', ()=>{
-                        const response = xhr.response;
-                        var data = response.data.map(function(item) {
-                            item['id'] = '@' + item.name;
-                            item['userId'] = item.id;
-                            return item;
-                        });
-                        resolve(data);
+export default {
+    mounted() {
+        console.log('Component mounted.')
+        ClassicEditor
+            .create( document.querySelector( '#commentEditor' ), {
+                toolbar: {},
+                mention: {
+                    feeds: [
+                        {
+                            marker: '@',
+                            // Define feed items callback
+                            feed: this.getFeedItems,
+                            // Define the custom item renderer
+                            //itemRenderer: customItemRenderer,
+                            minimumCharacters: 1
+                        }
+                    ]
+                }
+            }).then( newEditor => {
+                editor = newEditor;
+                console.log('test');
+    //            editor.plugins.get('FileRepository').createUploadAdapter = (loader)=>{
+    //                return new MyUploadAdapter(loader);
+    //            };
+                // List of plugins
+                // ClassicEditor.builtinPlugins.map( plugin => plugin.pluginName );
+                // toolbar items
+                // Array.from( editor.ui.componentFactory.names() );
+                handleCommentButton( editor );
+            }).catch( error => {
+                console.log( error );
+            });
+    },
+    methods: {
+        getFeedItems(queryText) {
+            return new Promise( resolve => {
+                let url = "/api/user/search?key=" + queryText;
+                
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', url);
+                xhr.responseType = 'json';
+                xhr.addEventListener('load', ()=>{
+                    const response = xhr.response;
+                    var data = response.data.map(function(item) {
+                        item['id'] = '@' + item.name;
+                        item['userId'] = item.id;
+                        return item;
                     });
-                    xhr.send();
+                    resolve(data);
                 });
-            },
-        }
+                xhr.send();
+            });
+        },
     }
+}
 </script>

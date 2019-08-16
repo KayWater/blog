@@ -9,19 +9,67 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+import VueRouter from 'vue-router';
+
+Vue.use(VueRouter);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-import constants from './components/Constants.vue';
 
-Vue.prototype.CONSTANTS = constants;
+import App from './components/App.vue';
 
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
-Vue.component('comment-editor', require('./components/CommentEditorComponent.vue').default);
+const Foo = { template: '<div>foo</div>' }
+const Bar = { template: '<div>bar</div>' }
+const User = { 
+    template: `
+        <div class='user'>
+            <h2> User {{ $route.params.id }} </h2>
+            <router-view></router-view>
+        </div>`,
+    watch: {
+        '$route' (to, from) {
+
+        }
+    }         
+}
+
+const routes = [
+    { path: '/foo', component: Foo },
+    { path: '/bar', component: Bar },
+    { path: '/user/:id', component: User,
+        children: [
+            {
+                path: '', 
+                component: UserHome 
+            },
+            {
+                path: 'profile',
+                component: UserProfile
+            },
+            {
+                path: 'posts',
+                component: UserPosts
+            }
+        ]
+    }
+]
+
+const router = new VueRouter({
+    routes
+});
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+    router,
+    // components: {
+    //      App,
+    // },
+    render: h=>h(App),
+    // created: function () {
+    // 	console.log('test');
+    // }
 });

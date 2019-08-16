@@ -2,7 +2,6 @@
 
 @push('scripts')
 <!-- <script src="{{ asset('js/plugins/ckeditor.js') }}" defer></script> -->
-<script src="{{ asset('js/plugins/comment.js') }}" defer></script>
 
 <link href="{{ asset('css/comment.css') }}" rel="stylesheet">
 <!-- <script src='{{ asset("js/commentbackup.js") }}' defer></script> -->
@@ -47,9 +46,7 @@
 <!--       			@endif -->
 <!--   			</div> -->
 <!--   		</form> -->
-  		
-  		<comment-editor></comment-editor>
-  		
+
   	</section>
     
 @endsection
