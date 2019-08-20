@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 use App\Article;
 use App\Tag;
-
-use DB;
 
 class HomeController extends Controller
 {
@@ -30,9 +30,15 @@ class HomeController extends Controller
         $articles = Article::with(['tags' => function($query){
             $query->where('status', 1);
         }])->orderBy('published_at', 'desc')->paginate(8);
+        // archive 
+        $years = Article::select(DB::raw('date_format(published_at, "%Y") as year'),
+            DB::raw('count(*) as total'))->groupBy('year')->orderBy('year', 'desc')->get();
+        $tags = Tag::all();
         
         return view("index", [
             'articles' => $articles,
+            'tags' => $tags,
+            'years' => $years,
         ]);
     }
     
@@ -44,6 +50,7 @@ class HomeController extends Controller
     public function tags(Request $request)
     {
         $tags = Tag::where('status', 1)->get();
+            
         return view("tags", [
             "tags" => $tags,
         ]);
@@ -77,10 +84,12 @@ class HomeController extends Controller
             }])->where(Db::raw('date_format(published_at, "%Y")'), $year)
             ->orderBy('published_at', 'desc')->paginate(8);
         }
-
+        
+        $tags = Tag::all();
         return view('archive', [
             'years' => $years,
             'articles' => $articles,
+            'tags' => $tags,
         ]);
     }
     
@@ -89,6 +98,6 @@ class HomeController extends Controller
      */
     public function test(Request $request)
     {
-        return view('test');
+        return view('home');
     }
 }

@@ -8,7 +8,7 @@
 @section("content")
     <section class="container">
       <div class="row">
-        <div class="col-sm-9">
+        <div class="col-sm-8">
           @foreach($articles as $key => $article)
           <div class="card article-card">
             <div class="card-body">
@@ -30,18 +30,27 @@
           </div>
           @endforeach
         </div>
-        <div class="col-sm-3">
-          <div class="card  mt-4">
-            <div class="card-header">归档</div>
-            <div class="card-body">
-              @foreach($years as $year)
-              <p class="card-text text-primary clearfix">
-                <a href='{{ url("/archive/$year->year") }}'>{{ $year->year }}</a>
- 				<span class="pull-right">{{ $year->total }}篇</span>
-              </p>
-              @endforeach
-            </div>
-          </div>
+        <div class="col-sm-4">
+          	<div class="card mt-4" >
+  				<div class="card-header">Tags</div>
+      			<div class="card-body">
+        		@foreach($tags as $tag)
+        			<a class="btn btn-sm btn-outline-secondary my-1" 
+        			href='{{ url("/article/tag/$tag->id") }}'>{{ $tag->name }}</a>
+        		@endforeach
+      			</div>
+    		</div>
+    		<div class="card  mt-4">
+        		<div class="card-header">Archive</div>
+        		<div class="card-body">
+            		@foreach($years as $year)
+            		<p class="card-text text-primary clearfix">
+                		<a href='{{ url("/archive/$year->year") }}'>{{ $year->year }}</a>
+			    		<span class="pull-right">{{ $year->total }}篇</span>
+            		</p>
+            		@endforeach
+        		</div>
+    		</div>
         </div>
       </div>
       <nav class="page-nav center-pagination" aria-label="Page pagination">
