@@ -10,8 +10,11 @@ require('./bootstrap');
 window.Vue = require('vue');
 
 import VueRouter from 'vue-router';
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
 
 Vue.use(VueRouter);
+Vue.use(ElementUI);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -22,54 +25,16 @@ Vue.use(VueRouter);
 
 import App from './components/App.vue';
 
-const Foo = { template: '<div>foo</div>' }
-const Bar = { template: '<div>bar</div>' }
-const User = { 
-    template: `
-        <div class='user'>
-            <h2> User {{ $route.params.id }} </h2>
-            <router-view></router-view>
-        </div>`,
-    watch: {
-        '$route' (to, from) {
-
-        }
-    }         
-}
-
-const routes = [
-    { path: '/foo', component: Foo },
-    { path: '/bar', component: Bar },
-    { path: '/user/:id', component: User,
-        children: [
-            {
-                path: '', 
-                component: UserHome 
-            },
-            {
-                path: 'profile',
-                component: UserProfile
-            },
-            {
-                path: 'posts',
-                component: UserPosts
-            }
-        ]
-    }
-]
-
-const router = new VueRouter({
-    routes
-});
+import router from './routes/index';
 
 const app = new Vue({
     el: '#app',
     router,
-    // components: {
-    //      App,
-    // },
+    components: {
+         App,
+    },
     render: h=>h(App),
-    // created: function () {
-    // 	console.log('test');
-    // }
+    created: function () {
+    	
+    }
 });
