@@ -12,7 +12,14 @@ use App\Http\Controllers\HomeController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/', 'HomeController@index');
+Route::get('/', 'Web\AppController@getApp')->middleware('auth');
+
+Route::get('/login', 'Web\AppController@getLogin')->name('login')->middleware('guest');
+
+Route::get('/auth/{social}', 'Web\AuthenticationController@getSocialRedirect')->middleware('guest');
+Route::get('/auth/{social}/callback', 'Web\AuthenticationController@getSocialCallback')->middleware('guest');
+
+
 
 Route::get("/test", "HomeController@test");
 
@@ -47,7 +54,7 @@ Route::middleware(['auth','isAdmin'])->namespace('Admin')->group(function () {
    Route::post('/editor/upload', 'EditorController@upload');
 });
 
-Auth::routes();
+//Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 

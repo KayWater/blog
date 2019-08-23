@@ -11,7 +11,7 @@ use App\Events\ArticleView;
 class ArticleController extends Controller
 {
     /**
-     * create a new controller instance
+     * Create a new controller instance
      * @return void
      */
     public function __construct()
