@@ -6,8 +6,6 @@
             <textarea name="comment" id="commentEditor"></textarea>
         </div>
         <div class="form-group text-right">
-            <button type="submit" id="commentSubmit" class="btn btn-primary ">
-            <span class="fa fa-comment-o fa-flip-horizontal"></span>&nbsp;&nbsp;评论</button>
             <button type="button" class="btn btn-primary login-required">
             <span class="fa fa-comment-o fa-flip-horizontal"></span>&nbsp;&nbsp;评论</button>
         </div>

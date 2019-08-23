@@ -86,6 +86,7 @@
 /************************************************************************/
 /******/ ({
 
+<<<<<<< HEAD
 /***/ "./node_modules/axios/index.js":
 /*!*************************************!*\
   !*** ./node_modules/axios/index.js ***!
@@ -56233,11 +56234,14 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+=======
+>>>>>>> c22dcc9574e65921368db93827849f82cef848db
 /***/ "./resources/js/app.js":
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
   \*****************************/
 /*! no exports provided */
+<<<<<<< HEAD
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -56408,7 +56412,11 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_template_id_332fccf4___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
+=======
+/***/ (function(module, exports) {
+>>>>>>> c22dcc9574e65921368db93827849f82cef848db
 
+throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nSyntaxError: D:\\gitreposite\\blog\\package.json: Error while parsing JSON - Unexpected token < in JSON at position 1254\n    at JSON.parse (<anonymous>)\n    at readConfigPackage (D:\\gitreposite\\blog\\node_modules\\@babel\\core\\lib\\config\\files\\package.js:57:20)\n    at D:\\gitreposite\\blog\\node_modules\\@babel\\core\\lib\\config\\files\\utils.js:29:12\n    at cachedFunction (D:\\gitreposite\\blog\\node_modules\\@babel\\core\\lib\\config\\caching.js:33:19)\n    at findPackageData (D:\\gitreposite\\blog\\node_modules\\@babel\\core\\lib\\config\\files\\package.js:33:11)\n    at buildRootChain (D:\\gitreposite\\blog\\node_modules\\@babel\\core\\lib\\config\\config-chain.js:105:85)\n    at loadPrivatePartialConfig (D:\\gitreposite\\blog\\node_modules\\@babel\\core\\lib\\config\\partial.js:85:55)\n    at Object.loadPartialConfig (D:\\gitreposite\\blog\\node_modules\\@babel\\core\\lib\\config\\partial.js:110:18)\n    at Object.<anonymous> (D:\\gitreposite\\blog\\node_modules\\babel-loader\\lib\\index.js:144:26)\n    at Generator.next (<anonymous>)\n    at asyncGeneratorStep (D:\\gitreposite\\blog\\node_modules\\babel-loader\\lib\\index.js:3:103)\n    at _next (D:\\gitreposite\\blog\\node_modules\\babel-loader\\lib\\index.js:5:194)\n    at D:\\gitreposite\\blog\\node_modules\\babel-loader\\lib\\index.js:5:364\n    at new Promise (<anonymous>)\n    at Object.<anonymous> (D:\\gitreposite\\blog\\node_modules\\babel-loader\\lib\\index.js:5:97)\n    at Object.loader (D:\\gitreposite\\blog\\node_modules\\babel-loader\\lib\\index.js:60:18)\n    at Object.<anonymous> (D:\\gitreposite\\blog\\node_modules\\babel-loader\\lib\\index.js:55:12)");
 
 /***/ }),
 

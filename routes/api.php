@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
+<<<<<<< HEAD
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
@@ -66,3 +67,11 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function () {
      */
     Route::get('/brew-methods', 'API\BrewMethodsController@getBrewMethods');
 });
+=======
+Route::middleware('auth:api')->get('/user', function (Request $request) {
+    return $request->user();
+});
+
+Route::get('/articles', 'Api\ArticleController@index');
+Route::get('/article/{id}', 'Api\ArticleController@show');
+>>>>>>> c22dcc9574e65921368db93827849f82cef848db

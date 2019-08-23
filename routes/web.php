@@ -23,15 +23,15 @@ Route::get('/auth/{social}/callback', 'Web\AuthenticationController@getSocialCal
 
 Route::get("/test", "HomeController@test");
 
-Route::get('article', 'HomeController@index');
-Route::get('tags', 'HomeController@tags');
-Route::get('archive', 'HomeController@archive');
-Route::get('archive/{year}', 'HomeController@archive');
+Route::get('/article', 'HomeController@index');
+Route::get('/tags', 'HomeController@tags');
+Route::get('/archive', 'HomeController@archive');
+Route::get('/archive/{year}', 'HomeController@archive');
 
 
-Route::get('article/search', 'ArticleController@search');
-Route::get('article/{id}', 'ArticleController@show')->middleware("viewStatistics");
-Route::get('article/tag/{id}', 'ArticleController@tag');
+Route::get('/article/search', 'ArticleController@search');
+Route::get('/article/{id}', 'ArticleController@show')->middleware("viewStatistics");
+Route::get('/article/tag/{id}', 'ArticleController@tag');
 
 
 //admin route
@@ -59,8 +59,8 @@ Route::middleware(['auth','isAdmin'])->namespace('Admin')->group(function () {
 Route::get('/home', 'HomeController@index')->name('home');
 
 //socialite auth
-Route::get('auth/provider/{driver}', 'Auth\SocialiteController@redirectToProvider');
-Route::get('auth/callback/{driver}', 'Auth\SocialiteController@handleCallback');
+Route::get('/auth/provider/{driver}', 'Auth\SocialiteController@redirectToProvider');
+Route::get('/auth/callback/{driver}', 'Auth\SocialiteController@handleCallback');
 
 //statistics 
-Route::get('statistics/userSource', 'StatisticsController@userSource');
+Route::get('/statistics/userSource', 'StatisticsController@userSource');

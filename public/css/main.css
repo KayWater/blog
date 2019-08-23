@@ -45,35 +45,6 @@
   box-shadow: none !important;
 }
 
-
-.socialite-splitter {
-	position: relative;
-    font-size: 0.8rem;
-    color: #b5b5b5;
-}
-.socialite-splitter:before {
-	content: "";
-    border-top: 1px solid #b5b5b5;
-    display: block;
-    position: absolute;
-    width: 5rem;
-    top: 0.5rem;
-}
-.socialite-splitter:after {
-	content: "";
-    border-top: 1px solid #b5b5b5;
-    display: block;
-    position: absolute;
-    right: 0;
-    width: 5rem;
-    top: 0.5rem;
-}
-.socialite-container .weibo-icon {
-	color: #ff0000;
-}
-
-
-
 /* comment style */
 
 .clearfix::after {
