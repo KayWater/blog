@@ -20,7 +20,6 @@
 
 <script>
 
-//import { default as ClassicEditor } from '../../ckeditor'
 import CommentEditor from '../CommentEditor'
 
 export default {

@@ -27,19 +27,21 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        $articles = Article::with(['tags' => function($query){
-            $query->where('status', 1);
-        }])->orderBy('published_at', 'desc')->paginate(8);
-        // archive 
-        $years = Article::select(DB::raw('date_format(published_at, "%Y") as year'),
-            DB::raw('count(*) as total'))->groupBy('year')->orderBy('year', 'desc')->get();
-        $tags = Tag::all();
+        // $articles = Article::with(['tags' => function($query){
+        //     $query->where('status', 1);
+        // }])->orderBy('published_at', 'desc')->paginate(8);
+        // // archive 
+        // $years = Article::select(DB::raw('date_format(published_at, "%Y") as year'),
+        //     DB::raw('count(*) as total'))->groupBy('year')->orderBy('year', 'desc')->get();
+        // $tags = Tag::all();
         
-        return view("index", [
-            'articles' => $articles,
-            'tags' => $tags,
-            'years' => $years,
-        ]);
+        // return view("index", [
+        //     'articles' => $articles,
+        //     'tags' => $tags,
+        //     'years' => $years,
+        // ]);
+
+        return view('app');
     }
     
     /**
@@ -91,13 +93,5 @@ class HomeController extends Controller
             'articles' => $articles,
             'tags' => $tags,
         ]);
-    }
-    
-    /**
-     * 
-     */
-    public function test(Request $request)
-    {
-        return view('home');
     }
 }

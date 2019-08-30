@@ -9,20 +9,17 @@
         <link rel="icon" type="image/x-icon" href="/favicon.ico">
 
         <title>Roast</title>
+        <script src="{{ asset('js/app.js') }}" defer></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+
         <script src="https://webapi.amap.com/maps?v=1.4.8&key=8269d8a1c887cbcbb5b59ec9295a7e89"></script>
-        <script type='text/javascript'>
-             window.Laravel = <?php echo json_encode([
-                'csrfToken' => csrf_token(),
-            ]); ?>
-        </script>
+
     </head>
     <body>
 
         <div id="app">
             <router-view></router-view>
         </div>
-
-        <script type="text/javascript" src="{{ asset('js/app.js') }}"></script>
 
     </body>
 </html>

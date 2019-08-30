@@ -1,23 +1,35 @@
 <template>
-    <div id="app">
-        <navbar></navbar>
+    <div id="page">
+        <navigation></navigation>
         
         <router-view></router-view>
+        <login-modal></login-modal>
+
     </div>
 </template>
 
 <script>
-import Navbar from './Navbar.vue';
+import Navigation from './global/Navigation.vue';
+import LoginModal from './auth/LoginModal.vue';
 
 export default {
     components: {
-        navbar: Navbar,
+        Navigation,
+        LoginModal,
+    },
+    data() {
+        return {
+        }
     },
     computed: {
       
     },
     methods: {
 
+    },
+
+    created() {
+        this.$store.dispatch('loadUser');
     }
 }
 </script>

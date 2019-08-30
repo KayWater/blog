@@ -9,23 +9,14 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
-<<<<<<< HEAD
 // import VueRouter from 'vue-router';
-// import ElementUI from 'element-ui';
-// import 'element-ui/lib/theme-chalk/index.css';
-
-
-// Vue.use(VueRouter);
-// Vue.use(ElementUI);
-=======
-import VueRouter from 'vue-router';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 
-Vue.use(VueRouter);
-Vue.use(ElementUI);
->>>>>>> c22dcc9574e65921368db93827849f82cef848db
 
+// Vue.use(VueRouter); 
+Vue.use(ElementUI);
+  
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -35,9 +26,8 @@ Vue.use(ElementUI);
 
 import App from './components/App.vue';
 
-<<<<<<< HEAD
 import router from './routes.js';
-import store from './store.js';
+import store from './store/index.js';
 
 // const app = new Vue({
 //     el: '#app',
@@ -55,18 +45,3 @@ new Vue({
     router,
     store,
 }).$mount('#app');
-=======
-import router from './routes/index';
-
-const app = new Vue({
-    el: '#app',
-    router,
-    components: {
-         App,
-    },
-    render: h=>h(App),
-    created: function () {
-    	
-    }
-});
->>>>>>> c22dcc9574e65921368db93827849f82cef848db

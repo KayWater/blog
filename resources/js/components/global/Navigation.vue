@@ -1,39 +1,77 @@
 <template>
-    <nav class="top-navigation">
-        <router-link :to="{ name: 'home'}">
-            <span class="logo">Roast</span>
-        </router-link>
+    <div class='container'>
+        <nav class='navbar navbar-expand-lg navbar-light bg-light'>
+            <a class='navbar-brand' href='/'>PIBlog</a>
+            <button class='navbar-toggler' type='button' data-toggle='collapse'
+            data-target='navbarSupportedContent' aria-controls='navbarSupportedContent'
+            aria-expanded='false' aria-label='Toggle navigation'>
+                <span class='navbar-toggler-icon'></span>
+            </button>
 
-        <ul class="links">
-            <li>
-                <router-link :to="{ name: 'cafes' }">
-                    Cafes
-                </router-link>
-            </li>
-        </ul>
+            <div class='collapse navbar-collapse' id='navbarSupportedContent'>
+                <ul class='navbar-nav mr-auto'>
+                    <li class='nav-item'>
+                        <router-link class='nav-link' to='/posts'>文章</router-link>
+                        
+                    </li>
+                </ul>
+                <form class='form-inline my-2 my-lg-0' id='searchForm'>
+                    <input class='form-control mr-sm-2' type='search' id='search'
+                    name='search' placeholder='search' aria-label='Search'>
+                    <button class='btn btn-outline-secondary my-2 my-sm-0' id='save'
+                    type='submit'>Search</button>
+                </form>
 
-        <div class="right">
-            <img class="avatar" :src="user.avatar" v-show="userLoadStatus == 2"/>
-        </div>
-    </nav>
+                <ul class='navbar-nav ml-auto'>
+                    <li class="nav-item">
+                        <el-button type="text" @click='login()'>登录</el-button>
+                        <router-link class='nav-link' to='/login'>登录</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class='nav-link' to='/register'>注册</router-link>
+                    </li>
+                </ul>
+            </div>
+        </nav> 
+    </div>
 </template>
 
-<script >
-    export default {
-        // 定义组件的计算属性
-        computed: {
-            // 从 Vuex 中获取用户加载状态
-            userLoadStatus(){
-                return this.$store.getters.getUserLoadStatus;
-            },
+<script>
+export default {
+    data() {
+        return {
+            
+        }
+    },
 
-            // 从 Vuex 中获取用户信息
-            user(){
-                return this.$store.getters.getUser;
-            }
+    computed: {
+        user() {
+            return this.$store.state.user;
+        },
+
+        userLoadStatus() {
+            return this.$store.state.userLoadStatus;
+        },
+
+        dialogLoginVisible() {
+            return this.$store.state.dialogLoginVisible;
+        }
+    },
+
+    methods: {
+        login() {
+            this.$store.commit('setDialogLoginVisible', true);
+        }
+    },
+
+    watch: {
+        dialogLoginVisible: function(value) {
+            console.log(value);
         }
     }
+}
 </script>
 
-<style >
+<style scoped>
+
 </style>
