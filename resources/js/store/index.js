@@ -8,12 +8,12 @@ require('es6-promise').polyfill();
 
 Vue.use(Vuex)
 
-import { users } from './modules/user.js';
+import { user } from './modules/user.js';
 import { auth } from './modules/auth.js';
 
 export default new Vuex.Store({
     modules: {
-        users,
+        user,
         auth,
     }
 })

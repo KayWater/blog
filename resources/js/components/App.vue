@@ -3,8 +3,6 @@
         <navigation></navigation>
         
         <router-view></router-view>
-        <login-modal></login-modal>
-
     </div>
 </template>
 
@@ -17,19 +15,39 @@ export default {
         Navigation,
         LoginModal,
     },
+
     data() {
         return {
+
         }
     },
+
     computed: {
-      
+        /**
+         * isLogined 
+         */
+        isLogined() {
+            return this.$store.getters['auth/isLogined'];
+        },
+
+        /**
+         * Current user
+         */
+        me() {
+            return this.$store.state.user.me;
+        },
     },
+
     methods: {
 
     },
 
     created() {
-        this.$store.dispatch('loadUser');
+        if (!this.isLogined) {
+            return ;
+        }
+
+        this.$store.dispatch('user/loadMe');
     }
 }
 </script>

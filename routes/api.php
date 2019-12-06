@@ -13,9 +13,42 @@ use Illuminate\Http\Request;
 |
 */
 
+
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/articles', 'Api\ArticleController@index');
-Route::get('/article/{id}', 'Api\ArticleController@show');
+Route::group(['prefix' => 'v1'], function() {
+    /**
+     * User regist
+     * URL:             /api/v1/auth/register
+     * Controller:      Api\Auth\RegisterController@register
+     * Method:          POST
+     * Description:     user regist
+     */
+    Route::post('/auth/register', 'Api\Auth\RegisterController@register');
+
+    /**
+     * User login
+     * URL:             /api/v1/auth/login
+     * Controller:      Api\Auth\LoginController@login
+     * Method:          POST
+     * Description:     user login
+     */
+    Route::post('/auth/login', 'Api\Auth\LoginController@login');
+
+
+});
+
+Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function() {
+    /**
+     * Get current user
+     * URL:             /api/v1/me
+     * Controller:      Api\UserController@me
+     * Method:          GET
+     * Description:     get current user
+     */
+    Route::get('/me', 'Api\UserController@me');
+    
+});

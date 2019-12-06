@@ -23,13 +23,32 @@
                 </form>
 
                 <ul class='navbar-nav ml-auto'>
-                    <li class="nav-item">
-                        <el-button type="text" @click='login()'>登录</el-button>
-                        <router-link class='nav-link' to='/login'>登录</router-link>
-                    </li>
-                    <li class="nav-item">
-                        <router-link class='nav-link' to='/register'>注册</router-link>
-                    </li>
+                    <template v-if="isLogined && me">
+                        <li class="nav-item">
+                            <el-dropdown>
+                                <span class='el-dropdown-link'>
+                                    {{ me.name }}<i class='el-icon-arrow-down el-icon--right'></i>
+                                </span>
+                                <el-dropdown-menu slot='dropdown'>
+                                    <el-dropdown-item>
+                                        <router-link class='nav-link' to='/console'>管理后台</router-link>
+                                    </el-dropdown-item>
+                                    <el-dropdown-item>
+                                        <el-button type='text' @click='logout'>注销</el-button>
+                                    </el-dropdown-item>
+                                </el-dropdown-menu>
+                            </el-dropdown>
+                        </li>
+                    </template>
+                    <template v-else>
+                        <li class="nav-item">
+                            <!-- <el-button type="text" @click='login()'>登录</el-button> -->
+                            <router-link class='nav-link' to='/login'>登录</router-link>
+                        </li>
+                        <li class="nav-item">
+                            <router-link class='nav-link' to='/register'>注册</router-link>
+                        </li>
+                    </template>
                 </ul>
             </div>
         </nav> 
@@ -45,33 +64,55 @@ export default {
     },
 
     computed: {
-        user() {
-            return this.$store.state.user;
+        /**
+         * Current user
+         */
+        me() {
+            return this.$store.state.user.me;
         },
 
-        userLoadStatus() {
-            return this.$store.state.userLoadStatus;
+         /**
+         * Whether is logined
+         */
+        isLogined() {
+            return this.$store.getters['auth/isLogined'];
         },
-
-        dialogLoginVisible() {
-            return this.$store.state.dialogLoginVisible;
-        }
     },
 
-    methods: {
-        login() {
-            this.$store.commit('setDialogLoginVisible', true);
-        }
+     methods: {
+        /**
+         * Logout
+         */
+        logout() {
+            // Dispatch the logout actions in auth module
+            this.$store.dispatch('auth/logout')
+            .then((response) => {
+                // Redirect to home page after logout;
+                this.$router.push({name: 'home'}).then((onComplete) => {
+                    
+                }).catch((error) => {
+                    if (error.name === "NavigationDuplicated") {
+                        return;
+                    }
+                });
+            });
+        },
     },
-
-    watch: {
-        dialogLoginVisible: function(value) {
-            console.log(value);
-        }
-    }
 }
 </script>
 
 <style scoped>
+.el-dropdown-link {
+    cursor: pointer;
+    color: #409EFF;
+}
+.el-icon-arrow-down {
+    font-size: 12px;
+}
 
+.navbar-light .navbar-nav .router-link-active {
+    color: #999999;
+    font-weight: bold;
+    font-size: 1rem;
+}
 </style>

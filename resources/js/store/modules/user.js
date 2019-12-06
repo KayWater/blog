@@ -1,31 +1,56 @@
 import UserAPI from '../../api/user.js';
+import { resolve } from 'url';
 
-export const users = {
+export const user = {
+    namespaced: true,
     /**
      * Defines the state being monitored for the module.
      */
     state: {
-        user: {},
-        userLoadStatus: 0,
-        userUpdateStatus: 0,
-        isLogined: false,
+        /**
+         * User 
+         */
+        user: null,
+
+        /**
+         * Current user
+         */
+        me: null,
+
     },
 
     /**
      * Defines the actions used to retrieve the data.
      */
     actions: {
-        loadUser({commit}) {
-            commit('setUserLoadStatus', 1);
-
-            UserAPI.getUser()
+        /**
+         * Load Current user
+         */
+        loadMe({commit}) {
+            return new Promise((resolve, reject) => {
+                UserAPI.getMe()
                 .then(function(response) {
-                    commit('setUser', response.data);
-                    commit('setUserLoadStatus', 2);
+                    commit('setMe', response.data.user);
+                    resolve(response.data);
                 }).catch(function() {
-                    commit('setUser', {});
-                    commit('setUserLoadStatus', 3);
-                })
+                    commit('setMe', null);
+                    reject(error.response.data);
+                });
+            });
+        },
+
+        /**
+         * Load User
+         */
+        loadUser({commit}) {
+            return new Promise((resolve, reject) => {
+                UserAPI.getUser()
+                    .then(function(response) {
+                        commit('setUser', response.data);
+                    }).catch(function() {
+                        commit('setUser', null);
+                    })
+            })
         }
     },
 
@@ -34,25 +59,19 @@ export const users = {
      */
     mutations: {
         /**
+         * Set current user 
+         */
+        setMe(state, user) {
+            state.me = user;
+        },
+
+        /**
          * Set the user 
          */
         setUser(state, user) {
             state.user = user;
         },
 
-        /**
-         * Set user load status
-         */
-        setUserLoadStatus(state, status) {
-            state.userLoadStatus = status;
-        },
-
-        /**
-         * Set user update status
-         */
-        setUserUpdateStatus(state, status) {
-            state.userUpdateStatus = status;
-        }
     },
 
     /**
