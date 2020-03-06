@@ -71,14 +71,14 @@ class LoginController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return Response
      */
-    // public function logout(Request $request) 
-    // {
-    //     if (Auth::guard('api')->check()) {
-    //         Auth::guard('api')->user()->token()->revoke();
-    //     }
+    public function logout(Request $request) 
+    {
+        if (Auth::guard('api')->check()) {
+            Auth::guard('api')->user()->token()->revoke();
+        }
 
-    //     return response()->json([
-    //         'message' => '注销成功',
-    //     ], 200);
-    // }
+        return response()->json([
+            'message' => '注销成功',
+        ], 200);
+    }
 }

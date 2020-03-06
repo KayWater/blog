@@ -22,5 +22,10 @@ export default {
         });
     },
 
-    
+    /**
+     * Post     /api/v1/auth/logout
+     */
+    logout: function() {
+        return axios.post(CONFIG.API_URL + '/auth/logout');
+    },
 } 

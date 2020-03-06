@@ -14,7 +14,7 @@ export default new VueRouter({
     routes: [
         {
             path: '/',
-            name: 'app',
+            name: 'home',
             components: Vue.component('App', require('./components/App.vue')),
             children: [
                 {
@@ -33,6 +33,28 @@ export default new VueRouter({
             path: '/login',
             name: 'login',
             components: Vue.component('Login', require('./components/auth/Login.vue')),
-        }
+        },
+        {
+            path: '/console',
+            components: Vue.component('Console', require('./components/console/Console.vue')),
+            children: [
+                {
+                    // 编辑文章
+                    path: 'post/write',
+                    components: Vue.component('PostCreate', require('./components/console/posts/PostCreate.vue')),
+                },
+                {
+                    // 更新文章
+                    path: 'post/:postID/edit',
+                    components: Vue.component('PostUpdate', require('./components/console/posts/PostUpdate.vue')),
+                    props: true,
+                },
+                {
+                    // 文章列表
+                    path: 'posts',
+                    components: Vue.component('PostList', require('./components/console/posts/PostList.vue')),
+                },
+            ]
+        },
     ]
 })

@@ -18,12 +18,18 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        'App\Events\ArticleView' => [
-            'App\Listeners\ArticleViewStatistics',
+        'Laravel\Passport\Events\AccessTokenCreated' => [
+            'App\Listeners\Auth\RevokeOldTokens',
         ],
-        'SocialiteProviders\Manager\SocialiteWasCalled' => [
-            'SocialiteProviders\Weibo\WeiboExtendSocialite@handle',
+        'Laravel\Passport\Events\RefreshTokenCreated' => [
+            'App\Listeners\Auth\PruneOldTokens',
         ],
+        // 'App\Events\ArticleView' => [
+        //     'App\Listeners\ArticleViewStatistics',
+        // ],
+        // 'SocialiteProviders\Manager\SocialiteWasCalled' => [
+        //     'SocialiteProviders\Weibo\WeiboExtendSocialite@handle',
+        // ],
     ];
 
     /**

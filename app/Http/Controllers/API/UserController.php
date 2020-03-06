@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\User;
+use App\Models\Post;
 
 class UserController extends Controller
 {
@@ -33,5 +34,58 @@ class UserController extends Controller
         ]);
     }
 
-    
+    /**
+     * Get the post belongs to current user.
+     * 
+     * @param   \Illuminate\Http\Request
+     * @param   Integer $postID
+     * @return  Response
+     */
+    public function getPost(Request $request, $postID)
+    {
+        $user = Auth::guard('api')->user();
+
+        $post = Post::with('tags')->where([
+            ['user_id', '=', $user->id],
+        ])->findOrFail($postID);
+
+        return response()->json([
+            'post' => $post,
+        ]);
+    }
+
+    /**
+     * Get posts belong to current user (pagination).
+     * 
+     * @param   \Illuminate\Http\Request $request
+     * @return  Response
+     */
+    public function getPosts(Request $request)
+    {
+        $limit = $request->query('limit', 10);
+        $offset = $request->query('offset', 0);
+        
+        $user = Auth::guard('api')->user();
+
+        $total = Post::where('user_id', $user->id)
+                        ->count();
+
+        $posts = Post::with('tags')->where('user_id', $user->id)->get();
+
+        //$posts = $user->posts()->limit($limit)->offset($offset)->get();
+
+        // next url
+        if ($limit + $offset >= $total) {
+            $next = "";
+        } else {
+            $next = url()->current() . '?limit=' . $limit . '&offset=' . ($offset + $limit);
+        }
+
+        return response()->json([
+            'posts' => $posts,
+            'total' => $total,
+            'next' => $next,
+            'offset' => $offset,
+        ]);
+    }
 }

@@ -38,10 +38,36 @@ Route::group(['prefix' => 'v1'], function() {
      */
     Route::post('/auth/login', 'Api\Auth\LoginController@login');
 
+    /**
+     * Get tags (pagination)
+     * URL:             /api/v1/tags
+     * Controller:      Api\TagController@getTags
+     * Method:          GET
+     * Description:     get tags
+     */
+    Route::get('/tags', 'Api\TagController@getTags');
+
+    /**
+     * Get posts (pagination)
+     * URL:             /api/v1/posts
+     * Controller:      Api\PostController@getPosts
+     * Method:          GET
+     * Description:     Get posts
+     */
+    Route::get('/posts', 'Api\PostController@getPosts');
 
 });
 
 Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function() {
+    /**
+     * Logout
+     * URL:             /api/v1/auth/logout
+     * Controller:      Api\Auth\LoginController@logout
+     * Method:          POST
+     * Description:     Logout
+     */
+    Route::post('/auth/logout', 'Api\Auth\LoginController@logout');
+
     /**
      * Get current user
      * URL:             /api/v1/me
@@ -51,4 +77,58 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function() {
      */
     Route::get('/me', 'Api\UserController@me');
     
+    /**
+     * Add a new tag
+     * URL:             /api/v1/tag
+     * Controller:      Api\TagController@addTag
+     * Method:          POST
+     * Description:     Add a new tag
+     */
+    Route::post('/tag', 'Api\TagController@addTag');
+
+    /**
+     * Add a new post
+     * URL:             /api/v1/post
+     * Controller:      Api\PostController@addPost
+     * Method:          POST
+     * Description:     Add a new post
+     */
+    Route::post('/post', 'Api\PostController@addPost');
+
+    /**
+     * Update a post
+     * URL:             /api/v1/post/{postID}
+     * Controller:      Api\PostController@updatePost
+     * Method:          POST
+     * Description:     Update a new post
+     */
+    Route::put('/post/{postID}', 'Api\PostController@updatePost');
+
+    /**
+     * Delete a post
+     * URL:             /api/v1/post/{postID}
+     * Controller:      Api\PostController@deletePost
+     * Method:          DELETE
+     * Description:     Delete a post
+     */
+    Route::delete('/post/{postID}', 'Api\PostController@deletePost');
+
+    /**
+     * Get posts belongs to current user (paginatin).
+     * URL:             /api/v1/user/posts
+     * Controller:      Api\UserController@getPosts
+     * Method:          GET
+     * Description:     Get posts belongs to current user.
+     */
+    Route::get('/user/posts', 'Api\UserController@getPosts');
+
+    /**
+     * Get the post belongs to current user.
+     * URL:             /api/v1/user/post/{postID}
+     * Controller:      Api\UserController@getPost
+     * Method:          GET
+     * Description:     Get the post belongs to current user.
+     */
+    Route::get('/user/post/{postID}', 'Api\UserController@getPost');
+
 });

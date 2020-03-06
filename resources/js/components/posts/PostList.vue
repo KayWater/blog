@@ -1,16 +1,27 @@
 <template>
-
     <section class='container mb-4'>
-        <post-item v-for='post in posts' v-bind:key='post.id' v-bind:post='post'></post-item>
+        <post-item 
+            v-for='post in posts' 
+            :key='post.id' 
+            :post='post'
+        >
+        </post-item>
         <div class='pagination'>
-            <el-pagination layout='prev, pager, next' :total='total' :page-size='pageSize'
-            :hide-on-single-page='true' @current-change='handleCurrentChange'></el-pagination>
+            <el-pagination 
+                layout='prev, pager, next' 
+                :total='total' 
+                :page-size='pageSize'
+                :hide-on-single-page='true' 
+                @current-change='handleCurrentChange'
+            >
+            </el-pagination>
         </div>
     </section>
 </template>
 
 <script>
-import PostItem from './PostItem'
+import PostAPI from '../../api/post.js';
+import PostItem from './PostItem.vue'
 
 export default {
     components: {
@@ -18,10 +29,12 @@ export default {
     },
     data() {
         return {
+            posts: [],
+
             loading: false,
-            posts: null,
             error: null,
-            pageSize: 10,
+            
+            pageSize: 10, 
             total: 0,
             currentPage: 1,
         }
@@ -30,30 +43,33 @@ export default {
     created() {
         this.getPosts()
     },
+
     watch: {
+        // Execute getPosts method once route changed.
         '$route': 'getPosts'
     },
+
     methods: {
+        /**
+         * Load the posts
+         */
         getPosts() {
-            this.error = this.posts = null;
-            this.loading = true;
-            var offset = (this.currentPage - 1) * this.pageSize;
-            var url = '/api/articles';
-            axios.get(url, {
+            let vm = this;
+            let offset = (this.currentPage - 1) * this.pageSize;
+
+            PostAPI.getPosts( {
                 params: {
-                    pageSize: this.pageSize,
+                    limit: vm.pageSize,
                     offset: offset,
                 }
-            }).then(response => {
-                //console.log(response);
-                this.loading = false;
-                this.posts = response.data.articles;
-                this.total = response.data.total;
-                this.pageSize = response.data.pageSize;
-            }).catch(function (error) {
-                console.log(error)
-                //this.error = error.toString();
-            })
+            } ).then( (response) => {
+                let data = response.data;
+                vm.posts = data.posts;
+                vm.offset = data.posts.length;
+            } ).catch( (error) => {
+                vm.posts = [];
+                console.log(error);
+            } );
         },
         handleCurrentChange(val) {
             this.currentPage = val;
