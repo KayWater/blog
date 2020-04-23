@@ -7,21 +7,23 @@
                     <p>{{ me.name }}</p>
                     <div class='bottom clearfix'>
                         <router-link to='/' 
-                        v-slot="{ href, route, navigate, isActive }">
+                            v-slot="{ href, route, navigate, isActive }"
+                        >
                             <el-button type='text' :active='isActive' 
-                            :href="href" @click='navigate'>首页</el-button>
+                                :href="href" @click='navigate'>首页</el-button>
                         </router-link>
                         <el-button type='text' @click="logout">注销</el-button>
                     </div>
                 </div>
             </el-card>
             <el-menu
-            :default-active="this.$route.path"
-            class="el-menu-vertical-demo"
-            @open="handleOpen"
-            @close="handleClose"
-            :default-openeds="defualtOpends"
-            :router='true'>
+                :default-active="this.$route.path"
+                class="el-menu-vertical-demo"
+                @open="handleOpen"
+                @close="handleClose"
+                :default-openeds="defualtOpends"
+                :router='true'
+            >
                 <el-submenu index="1">
                     <template slot="title">
                     <span>设置</span>
@@ -58,10 +60,10 @@ export default {
 
     methods: {
       handleOpen(key, keyPath) {
-        console.log(key, keyPath);
+
       },
       handleClose(key, keyPath) {
-        console.log(key, keyPath);
+ 
       },
 
       /**
@@ -72,7 +74,7 @@ export default {
             this.$store.dispatch('auth/logout')
             .then((response) => {
                 // Redirect to home page after logout;
-                this.$router.push({name: 'home'}).then((onComplete) => {
+                this.$router.push('/').then((onComplete) => {
                     
                 }).catch((error) => {
                     if (error.name === "NavigationDuplicated") {

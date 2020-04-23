@@ -48,10 +48,19 @@
                         >编辑</el-button>
                     </router-link>
                     <el-button @click='deletePost(scope.row)'
-                    size='small' type='text'>删除</el-button>
+                        type='text'>删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
+        <div class="block text-center">
+            <el-pagination
+                hide-on-single-page
+                @current-change="handleCurrentChange"
+                layout="prev, pager, next"
+                :page-size="limit"
+                :total="total">
+            </el-pagination>
+        </div>
     </div>
 </template>
 
@@ -62,8 +71,9 @@ import PostAPI from '../../../api/post.js';
 export default {
     data() {
         return {
-            limit: 10,
+            limit: 12,
             offset: 0,
+            total: 0,
 
             posts: [],
         }
@@ -75,14 +85,43 @@ export default {
 
     methods: {
         /**
+         * Handle current page change
+         */
+        handleCurrentChange(current) {
+            let params = {
+                limit: this.limit,
+                offset: (current - 1) * this.limit,
+            };
+
+            this.loadPosts(params);
+        },
+
+        /**
+         * Load posts
+         */
+        loadPosts(params) {
+            let vm = this;
+            UserAPI.getPosts( {
+                params: params,
+            } ).then( (response) => {
+                let data = response.data;
+                vm.posts = data.posts;
+                vm.offset += data.posts.length;
+                vm.total = data.total;
+            } ).catch( (error) => {
+                console.log(error.response);
+            } );
+        },
+
+        /**
          * Delete a post
          */
         deletePost(post) {
             let vm = this;
             // Confirm delete operation
-            vm.$confirm('此操作将永久删除该文章,是否继续', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
+            vm.$confirm('This operation will permanently delete the post, continure?', 'warning', {
+                confirmButtonText: 'continue',
+                cancelButtonText: 'cancel',
                 type: 'warning',
             }).then( () => {
                 PostAPI.deletePost(post.id)
@@ -92,7 +131,7 @@ export default {
                         let index = vm.posts.findIndex( ({id}) => id === data.post.id );
                         vm.posts.splice(index, 1);
                         vm.$message( {
-                            message: 'The operation was successful',
+                            message: 'Operation success',
                             type: 'success',
                         } );
                     } ).catch( (error) => {
@@ -114,19 +153,12 @@ export default {
     created() {
         let vm = this;
         // Load the posts belong to current user
-        UserAPI.getPosts( {
-            params: {
-                limit: vm.limit,
-                offset: vm.offset,
-            }
-        } ).then( (response) => {
-            let data = response.data;
-            vm.posts = data.posts;
-            vm.offset += data.posts.length;
-        } ).catch( (error) => {
-            console.log(error.response);
-        } );
+        let params = {
+            limit: vm.limit,
+            offset: vm.offset,
+        };
 
+        vm.loadPosts(params);
     },
 }
 </script>

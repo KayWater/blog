@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Models\User;
 use App\Models\Post;
+use App\Models\Draft;
 
 class UserController extends Controller
 {
@@ -70,22 +71,64 @@ class UserController extends Controller
         $total = Post::where('user_id', $user->id)
                         ->count();
 
-        $posts = Post::with('tags')->where('user_id', $user->id)->get();
-
-        //$posts = $user->posts()->limit($limit)->offset($offset)->get();
-
-        // next url
-        if ($limit + $offset >= $total) {
-            $next = "";
-        } else {
-            $next = url()->current() . '?limit=' . $limit . '&offset=' . ($offset + $limit);
-        }
+        $posts = Post::with('tags')
+                    ->where('user_id', $user->id)
+                    ->orderBy('updated_at', 'desc')
+                    ->limit($limit)
+                    ->offset($offset)
+                    ->get();
 
         return response()->json([
             'posts' => $posts,
             'total' => $total,
-            'next' => $next,
-            'offset' => $offset,
+        ]);
+    }
+
+    /**
+     * Get drafts belong to current user (pagination).
+     * 
+     * @param   \Illuminate\Http\Request $request
+     * @return  Response
+     */
+    public function getDrafts(Request $request)
+    {
+        $limit = $request->query('limit', 10);
+        $offset = $request->query('offset', 0);
+        
+        $user = Auth::guard('api')->user();
+
+        $total = Draft::where('user_id', $user->id)
+                        ->count();
+
+        $drafts = Draft::where('user_id', $user->id)
+                    ->orderBy('updated_at', 'desc')
+                    ->limit($limit)
+                    ->offset($offset)
+                    ->get();
+
+        return response()->json([
+            'drafts' => $drafts,
+            'total' => $total,
+        ]);
+    }
+
+    /**
+     * Get the draft belongs to current user.
+     * 
+     * @param   \Illuminate\Http\Request
+     * @param   Integer $draftID
+     * @return  Response
+     */
+    public function getDraft(Request $request, $draftID)
+    {
+        $user = Auth::guard('api')->user();
+
+        $draft = Draft::with('tags')->where([
+            ['user_id', '=', $user->id],
+        ])->findOrFail($draftID);
+
+        return response()->json([
+            'draft' => $draft,
         ]);
     }
 }

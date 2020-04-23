@@ -6,10 +6,10 @@
             </div>
             <div class='navbar-title'>
                 <p class='d-inline'>写文章</p>
-                <p class='d-inline editor-status'>{{ editorStatus }}</p>
+                <p class='d-inline editor-status' v-bind:class="[editorInBusyStatus ? 'editor-status-busy' : '']">{{ editorStatusMessage }}</p>
             </div>
             <div>
-                <el-button @click='publish'>发布文章</el-button>
+                <el-button @click='publish' :disabled="publishButtonAvailable">发布文章</el-button>
             </div>
         </nav>
         <div class='container-fluid'>
@@ -33,8 +33,7 @@
                     <div class="document-editor">
                         <div class="toolbar-container"></div>
                         <div class="content-container">
-                            <div id="editor" :v-html="postForm.content">
-                            </div>
+                            <div id="editor" :v-html="postForm.content"></div>
                         </div>
                     </div>
                 </el-form-item>
@@ -95,8 +94,11 @@ import { customUploadAdapterPlugin } from '../../../utils/CustomUploadAdapter.js
 export default {
     data() {
         return {
-            editor: null,
-            editorStatus: '',
+            editor: null, // editor instance
+            editorInBusyStatus: false, // whether editor in editing status.
+            editorStatusMessage: '', // message about current status
+            initialEditorStatus: true, // means whether the editor is in initial status.
+            
             dialogTagChoiceVisible: false,
             dialogTagCreateVisible: false,
             tagsLimit: 5,
@@ -110,6 +112,7 @@ export default {
             tags: [],
 
             postForm: {
+                draftID: 0,
                 postID: 0,
                 title: '',
                 tags: [],
@@ -145,6 +148,9 @@ export default {
     },
 
     computed: {
+        publishButtonAvailable() {
+            return this.postForm.title == '' || this.postForm.content == '';
+        }
     },
 
     methods: {
@@ -239,14 +245,9 @@ export default {
                 if (!valid) {
                     return false;
                 }
-                // if postID equal to 0, add a new post;
-                // otherwise, update the post
-                if (vm.postForm.postID === 0) {
-                    PostAPI.addPost( {
-                        title: vm.postForm.title,
-                        tags: vm.postForm.tags,
-                        content: vm.postForm.content,
-                    } ).then( (response) => {
+                console.log('publish');
+                PostAPI.addPost( vm.postForm )
+                    .then( (response) => {
                         let data = response.data;
                         vm.postForm.postID = data.post.id;
                         vm.$message( {
@@ -267,7 +268,6 @@ export default {
                             type: 'error',
                         } );
                     } );
-                }
             });
         },
 
@@ -275,259 +275,139 @@ export default {
          * Auto save editor content
          */
         saveData( content ) {
-            return new Promise( resolve => {
-                (function() {
-                    console.log('test');
-                    // var _token = $("meta[name='csrf-token']").attr('content');
-                    // var id = $("#draftId").val();
-                    // var title = $("#title").val();
-                    // if(data != preEditorData) {
-                    //     $.ajax({
-                    //         url: "/admin/draft/prestore",
-                    //         type: "POST",
-                    //         data: {
-                    //             _token: _token,
-                    //             id: id,
-                    //             title: title,
-                    //             content: data,
-                    //         },
-                    //         success: function(res) {
-                    //             if(res.errorCode == 0) {
-                    //                 $("#draftId").val(res.data.draftId);
-                    //                 title = title || "无标题草稿";
-                    //                 if(!id) {
-                    //                     var navHtml = "<li class=\"nav-item active\">" +
-                    //                         "<a class=\"nav-link\" " +
-                    //                         "href=\"/admin/draft/edit/"+res.data.draftId+"\">" +
-                    //                             "<p class=\"draft-title\">"+title+"</p>" +
-                    //                             "<p class=\"draft-time\">更新于："+res.data.updatedAt+"</p>" +
-                    //                         "</a></li>";
-                    //                     $(".draft-nav").append(navHtml);
-                    //                 } else {
-                    //                     var $navItem = $(".draft-nav").find(".nav-item.active");
-                    //                     $navItem.find(".draft-title").html(title);
-                    //                     $navItem.find(".draft-time").html("更新于："+res.data.updatedAt);
-                    //                 }
-                    //             }
-                    //         }
-                    //     });
-                    // }
-                    resolve();
-                })();
-            })
+            let vm = this;
+            if (vm.initialEditorStatus && (content == '' && vm.postForm.title == '')) {
+                return ;
+            }
+            return new Promise((resolve, reject) => {
+                PostAPI.autosave(vm.postForm)
+                    .then((response) => {
+                        let draft = response.data.draft;
+                        vm.postForm.draftID = draft.id;
+                        resolve()
+                    })
+            });
+        },
+
+        /**
+         * Create editor instance
+         */
+        createEditor() {
+            let vm = this;
+
+            DecoupledDocumentEditor
+                .create( document.querySelector( '#editor' ), {
+                    extraPlugins: [ customUploadAdapterPlugin ],
+                    toolbar: {
+                        items: [
+                            'heading',
+                            '|',
+                            'fontSize',
+                            'fontFamily',
+                            'fontBackgroundColor',
+                            'fontColor',
+                            '|',
+                            'bold',
+                            'italic',
+                            'underline',
+                            'strikethrough',
+                            'highlight',
+                            '|',
+                            'alignment',
+                            '|',
+                            'numberedList',
+                            'bulletedList',
+                            '|',
+                            'indent',
+                            'outdent',
+                            '|',
+                            'link',
+                            'blockQuote',
+                            'imageUpload',
+                            'insertTable',
+                            'mediaEmbed',
+                            '|',
+                            'code',
+                            'codeBlock',
+                            'subscript',
+                            'superscript',
+                            '|',
+                            'undo',
+                            'redo'
+                        ]
+                    },
+                    autosave: {
+                        waitingTime: 6000,
+                        save( editor ) {
+                            return vm.saveData( editor.getData() );
+                        }
+                    },
+                    image: {
+                        toolbar: [
+                            'imageTextAlternative',
+                            'imageStyle:full',
+                            'imageStyle:side'
+                        ]
+                    },
+                    table: {
+                        contentToolbar: [
+                            'tableColumn',
+                            'tableRow',
+                            'mergeTableCells',
+                            'tableCellProperties',
+                            'tableProperties'
+                        ]
+                    },
+                } )
+                .then( editor => {
+                    vm.editor = editor;
+                    // Set a custom container for the toolbar.
+                    document.querySelector( '.toolbar-container' ).appendChild( editor.ui.view.toolbar.element );
+                    document.querySelector( '.ck-toolbar' ).classList.add( 'ck-reset_all' );
+
+                    // console.log( Array.from( editor.ui.componentFactory.names() ) )
+                    vm.displayStatus( editor );
+
+                    // Listen doucment change
+                    editor.model.document.on('change:data', function() {
+                        vm.initialEditorStatus = false;
+                        vm.postForm.content = editor.getData();
+                    });
+                } )
+                .catch( error => {
+                    console.error( error );
+                } );
+        },
+
+        // Display the status of editor
+        displayStatus( editor ) {
+            let vm = this;
+            const pendingActions = editor.plugins.get( 'PendingActions' );
+
+            pendingActions.on( 'change:hasAny', ( evt, propertyName, newValue ) => {
+                if (vm.initialEditorStatus && !newValue) {
+                    vm.editorInBusyStatus = false;
+                    vm.editorStatusMessage = '';
+                } else if (!vm.initialEditorStatus && !newValue){
+                    vm.editorInBusyStatus = false;
+                    vm.editorStatusMessage = '已保存';
+                } else {
+                    vm.editorInBusyStatus = true;
+                    vm.editorStatusMessage = '保存中';
+                }
+            } );
         }
     },
 
     mounted() {
         let vm = this;
 
-        // Create ckeditor instance
-        DecoupledEditor.create(document.querySelector('#editor'), {
-            extraPlugins: [ customUploadAdapterPlugin ],
-            autosave: {
-                save( editor ) {
-                    return vm.saveData( editor.getData() );
-                }
-            }
-        }).then(editor => {
-            // Create toolbar element
-            const toolbarContainer = document.querySelector( '.toolbar-container' );
-			toolbarContainer.prepend( editor.ui.view.toolbar.element );
-
-            vm.preEditorData = editor.getData();
-            console.log( Array.from( editor.ui.componentFactory.names() ) )
-            // vm.handleStatusChanges( editor );
-            // vm.handleSaveButton( editor );
-            // vm.handleBeforeUnload( editor );
-
-            vm.editor = editor;
-            vm.postForm.content = editor.getData();
-
-            // Listen doucment change
-            editor.model.document.on('change:data', function(){
-                vm.postForm.content = editor.getData();
+        // create editor instance after DOM rendered
+        vm.$nextTick()
+            .then(()=> {
+                vm.createEditor();
             });
-        }).catch(error => {
-            console.log(error);
-        });
     },
-//     ClassicEditor
-//         .create( document.querySelector( '#editor' ), {
-// 			autosave: {
-// 				save(editor){
-// 					return saveData( editor.getData() );
-// 				}
-// 			}
-//         }).then( newEditor => {
-//             editor = newEditor;
-//             editor.plugins.get('FileRepository').createUploadAdapter = (loader)=>{
-//                 return new UploadAdapter(loader);
-//             };
-//             preEditorData = editor.getData();
-//             handleStatusChanges( editor );
-//             handleSaveButton( editor );
-//             handleBeforeUnload( editor );
-            
-//         }).catch( error => {
-//             console.log( error );
-//         } );
-//     //auto save 
-//     function saveData( data ) {
-//     	return new Promise( resolve => {
-//     		(function() {
-//     			var _token = $("meta[name='csrf-token']").attr('content');
-//     			var id = $("#draftId").val();
-//     			var title = $("#title").val();
-//     			if(data != preEditorData) {
-//     				$.ajax({
-//     					url: "/admin/draft/prestore",
-//     					type: "POST",
-//     					data: {
-//     						_token: _token,
-//     						id: id,
-//     						title: title,
-//     						content: data,
-//     					},
-//     					success: function(res) {
-// 	        				if(res.errorCode == 0) {
-// 	        					$("#draftId").val(res.data.draftId);
-// 	        					title = title || "无标题草稿";
-// 	        					if(!id) {
-// 	        						var navHtml = "<li class=\"nav-item active\">" +
-// 	        							"<a class=\"nav-link\" " +
-// 	        							"href=\"/admin/draft/edit/"+res.data.draftId+"\">" +
-// 	        								"<p class=\"draft-title\">"+title+"</p>" +
-// 	        								"<p class=\"draft-time\">更新于："+res.data.updatedAt+"</p>" +
-// 	        							"</a></li>";
-// 	        						$(".draft-nav").append(navHtml);
-// 	        					} else {
-// 	        						var $navItem = $(".draft-nav").find(".nav-item.active");
-// 	        						$navItem.find(".draft-title").html(title);
-// 	        						$navItem.find(".draft-time").html("更新于："+res.data.updatedAt);
-// 	        					}
-// 	        				}
-//     					}
-//     				});
-//     			}
-//     			resolve();
-//     		})();
-//     	})
-//     }
-
-//     function handleSaveButton( editor ) {
-//     	const saveButton = document.querySelector( "#save" );
-//     	const pendingActions = editor.plugins.get( "PendingActions" );
-    	
-//     	saveButton.addEventListener( 'click', evt => {
-// 	        const data = editor.getData();
-// 	        // Register the action of saving the data as a "pending action".
-// 	        // All asynchronous actions related to the editor are tracked like this,
-// 	        // so later on you only need to check `pendingActions.hasAny` to check
-// 	        // whether the editor is busy or not.
-// 	        const action = pendingActions.add( 'Saving changes' );
-
-// 	        evt.preventDefault();
-	        
-// 	        var _token = $("meta[name='csrf-token']").attr("content");
-// 	        var articleId = $("#articleId").val();
-// 	        var draftId = $("#draftId").val();
-// 	        var title = $("#title").val();
-// 	        var $tags = $(":checkbox[name='tags']:checked");
-// 	        var tags = [];
-// 	        $.each($tags, function(index, item) {
-// 	        	tags.push($(item).val());
-// 	        });
-// 	        $.ajax({
-// 	        	url: "/admin/article/store",
-// 	        	type: "POST",
-// 	        	data: {
-// 	        		_token: _token,
-// 	        		id: articleId,
-// 	        		draftId: draftId,
-// 	        		title: title,
-// 	        		content: data,
-// 	        		tags: tags
-// 	        	},
-// 	        	success: function(res) {
-//         			pendingActions.remove( action );
-// 		            // Reset isDirty only if the data did not change in the meantime.
-// 		            if ( data == editor.getData() ) {
-// 		                isDirty = false;
-// 		            }
-// 	        		updateStatus( editor );
-// 	        		if(res.errorCode != 0) {
-// 	        			initErrorModal(res.errorMsg);
-// 	        		} else if(res.errorCode == 0) {
-// 	        			$("#articleId").val(res.data.articleId);
-// 	        			window.location.href="/dashboard";
-// 	        		}
-// 	        	}
-// 	        });
-// 	        // Save the data to a fake HTTP server.
-// //	        setTimeout( () => {
-// //	            pendingActions.remove( action );
-// //	            // Reset isDirty only if the data did not change in the meantime.
-// //	            if ( data == editor.getData() ) {
-// //	                isDirty = false;
-// //	            }
-// //	
-// //	            updateStatus( editor );
-// //	        }, HTTP_SERVER_LAG );
-// 	    } );
-//     }
-    
-//     // Listen to new changes (to enable the "Save" button) and to
-//     // pending actions (to show the spinner animation when the editor is busy).
-//     function handleStatusChanges( editor ) {
-//     	editor.plugins.get("PendingActions").on("change:hasAny", () => updateStatus(editor));
-    	
-//     	editor.model.document.on("change:data", () => {
-//     		isDurty = true;
-//     		updateStatus(editor);
-//     	}) 
-//     }
-//     // If the user tries to leave the page before the data is saved, ask
-//     // them whether they are sure they want to proceed.
-//     function handleBeforeUnload( editor ) {
-//     	const pendingActions = editor.plugins.get("PendingActions");
-//     	window.addEventListener("beforeunload", evt => {
-//     		evt.preventDefault();
-//     		if( pendingActions.hasAny ) {
-//     			evt.preventDefault();
-//     		}
-//     	})
-//     }
-    
-//     function updateStatus( editor ) {
-//     	const saveButton = document.querySelector("#save");
-//     	const editorStatus = document.querySelector("#editor-status");
-		
-//     	// Disables the "Save" button when the data on the server is up to date.
-//     	// Display the editor status when the data on the server is up to date.
-//     	if(isDurty) {
-//     		saveButton.classList.add("disabled");
-//     		editorStatus.innerHTML = "保存中";
-//     		editorStatus.classList.add("text-warning");
-//     		editorStatus.classList.remove("text-success");
-//     	} else {
-//     		saveButton.classList.remove("disabled");
-//     		editorStatus.innerHTML = "已保存";
-//     		editorStatus.classList.remove("text-warning");
-//     		editorStatus.classList.add("text-success");
-//     	}
-    	
-//     	if(editor.plugins.get("PendingActions").hasAny) {
-//     		saveButton.classList.add("disabled");
-//     		editorStatus.innerHTML = "保存中";
-//     		editorStatus.classList.add("text-warning");
-//     		editorStatus.classList.remove("text-success");
-//     	} else {
-//     		saveButton.classList.remove("disabled");
-//     		editorStatus.innerHTML = "已保存";
-//     		editorStatus.classList.remove("text-warning");
-//     		editorStatus.classList.add("text-success");
-//     	}
-//     }
 }
 </script>
 
@@ -575,5 +455,12 @@ export default {
 .content-container {
 	padding: var(--ck-sample-base-spacing);
 	background: #eee;
+}
+.editor-status {
+    font-size: 0.6rem;
+    color: #67C23A
+}
+.editor-status-busy {
+    color: #E6A23C
 }
 </style>

@@ -57,7 +57,7 @@ export default {
         return {
             form: {
                 email: '793500318@qq.com',
-                password: '123456',
+                password: '111111',
                 remember: false,
             },
             rules: {

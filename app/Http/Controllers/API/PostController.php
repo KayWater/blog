@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Post;
+use App\Models\Draft;
 use App\Models\Tag;
 
 class PostController extends Controller
@@ -40,6 +41,15 @@ class PostController extends Controller
         $tags = $request->input('tags');
         $post->tags()->attach(array_column($tags, 'id'));
 
+        $draftID = $request->input('draftID');
+
+        // if draft exist, delete it. 
+        // avoid query database when draft id equal to 0.
+        if($draftID && $draft = Draft::find($draftID)) {
+            $draft->tags()->detach();
+            $draft->delete();
+        }
+
         return response()->json([
             'post' => $post->load('tags'),
         ]);
@@ -53,7 +63,6 @@ class PostController extends Controller
      */
     public function updatePost(Request $request, $postID)
     {
-        $user = Auth::guard('api')->user();
         $post = Post::findOrFail($postID);
 
         $this->authorize('update', $post);
@@ -65,9 +74,51 @@ class PostController extends Controller
         $tags = $request->input('tags');
         $post->tags()->sync(array_column($tags, 'id'));
 
+        $draftID = $request->input('draftID');
+
+        // if draft exist, delete it. 
+        // avoid query database when draft id equal to 0.
+        if($draftID && $draft = Draft::find($draftID)) {
+            $draft->tags()->detach();
+            $draft->delete();
+        }
+
         return response()->json([
             'post' => $post->load('tags'),
         ]);
+    }
+
+    /**
+     * Auto save post as draft
+     * 
+     * @param   \Illuminate\Http\Request
+     * @return  Response
+     */
+    public function autosave(Request $request)
+    {
+        $user = Auth::guard('api')->user();
+
+        $draftID = $request->input('draftID');
+        $draft = Draft::findOrNew($draftID);
+
+        $postID = $request->input('postID');
+        if ($postID) {
+            $draft = Draft::firstOrNew(['post_id' => $postID]);
+        }
+
+        $draft->user_id = $user->id;
+        $draft->post_id = $postID;
+        $draft->title = $request->input('title');
+        $draft->content = $request->input('content');
+        $draft->save();
+
+        $tags = $request->input('tags');
+        $draft->tags()->sync(array_column($tags, 'id'));
+
+        return response()->json([
+            'draft' => $draft->load('tags'),
+        ]);
+
     }
 
     /**
@@ -84,22 +135,14 @@ class PostController extends Controller
 
         $posts = Post::with(['user:id,name', 'tags:tags.id,name'])
             ->where('status', Post::POST_STATUS_PUBLISHED)
+            ->orderBy('published_at', 'desc')
             ->limit($limit)
             ->offset($offset)
             ->get();
 
-        // next url
-        if ($limit + $offset >= $total) {
-            $next = "";
-        } else {
-            $next = url()->current() . '?limit=' . $limit . '&offset=' . ($offset + $limit);
-        }
-
         return response()->json([
             'posts' => $posts,
             'total' => $total,
-            'next' => $next,
-            'offset' => $offset,
         ]);
     }
 
@@ -112,7 +155,6 @@ class PostController extends Controller
      */
     public function deletePost(Request $request, $postID)
     {
-        $user = Auth::guard('api')->user();
         $post = Post::find($postID);
 
         // Whether the current user can delete the post
@@ -125,6 +167,29 @@ class PostController extends Controller
             'post' => $post,
         ]);
     }
+
+    /**
+     * Delete a draft
+     * 
+     * @param   \Illuminate\Http\Request $request
+     * @param   Integer $draftID
+     * @return  Response
+     */
+    public function deleteDraft(Request $request, $draftID)
+    {
+        $draft = Draft::find($draftID);
+        
+        // Whether the current user can delete the draft
+        $this->authorize('delete', $draft);
+
+        $draft->tags()->detach();
+        $draft->delete();
+
+        return response()->json([
+            'draft' => $draft,
+        ]);
+    }
+    
 
     /**
      * index method
@@ -147,7 +212,7 @@ class PostController extends Controller
                             ->limit($pageSize)
                             ->get();
 
-        // archive 
+        // archive
         // $years = Article::select(DB::raw('date_format(published_at, "%Y") as year'),
         //     DB::raw('count(*) as total'))->groupBy('year')->orderBy('year', 'desc')->get();
         // $tags = Tag::all();

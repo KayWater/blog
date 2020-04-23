@@ -87,6 +87,15 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function() {
     Route::post('/tag', 'Api\TagController@addTag');
 
     /**
+     * Auto save post as draft
+     * URL:             /api/v1/post/autosave
+     * Controller:      Api\PostController@autosave
+     * Method:          POST
+     * Description:     Auto save post as draft
+     */
+    Route::post('/post/autosave', 'Api\PostController@autosave');
+
+    /**
      * Add a new post
      * URL:             /api/v1/post
      * Controller:      Api\PostController@addPost
@@ -114,6 +123,15 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function() {
     Route::delete('/post/{postID}', 'Api\PostController@deletePost');
 
     /**
+     * Delete a draft
+     * URL:             /api/v1/draft/{draftID}
+     * Controller:      Api\PostController@deleteDraft
+     * Method:          DELETE
+     * Description:     Delete a draft
+     */
+    Route::delete('/draft/{draftID}', 'Api\PostController@deleteDraft');
+
+    /**
      * Get posts belongs to current user (paginatin).
      * URL:             /api/v1/user/posts
      * Controller:      Api\UserController@getPosts
@@ -130,5 +148,23 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function() {
      * Description:     Get the post belongs to current user.
      */
     Route::get('/user/post/{postID}', 'Api\UserController@getPost');
+
+    /**
+     * Get the drafts belong to current user (pagination).
+     * URL:             /api/v1/user/drafts
+     * Controller:      Api\UserController@getDrafts
+     * Method:          GET
+     * Description:     Get drafts belongs to current user.
+     */
+    Route::get('/user/drafts', 'Api\UserController@getDrafts');
+
+    /**
+     * Get the draft belongs to current user.
+     * URL:             /api/v1/user/drafts
+     * Controller:      Api\UserController@getDraft
+     * Method:          GET
+     * Description:     Get draft belongs to current user.
+     */
+    Route::get('/user/draft/{draftID}', 'Api\UserController@getDraft');
 
 });

@@ -16,7 +16,7 @@ class Post extends Model
     /**
      * 需要转换成日期的属性
      */
-    protected $dates = ['deleted_at', 'published_at'];
+    protected $dates = ['created_at', 'updated_at', 'deleted_at', 'published_at'];
     
     /**
      * The attributes that are mass assignable.

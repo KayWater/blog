@@ -24,24 +24,22 @@ Vue.use(ElementUI);
  */
 
 
-import App from './components/App.vue';
+// import App from './components/App.vue';
 
 import router from './routes.js';
 import store from './store/index.js';
+import './filters/index.js';
 
-// const app = new Vue({
-//     el: '#app',
-//     router,
-//     // components: {
-//     //      App,
-//     // },
-//     render: h=>h(App),
-//     // created: function () {
-//     // 	console.log('test');
-//     // }
-// });
-
-new Vue({
+const app = new Vue({
     router,
     store,
-}).$mount('#app');
+    el: '#app',
+    // components: {
+    //      App,
+    // },
+});
+
+// new Vue({
+//     router,
+//     store,
+// }).$mount('#app');

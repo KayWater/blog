@@ -8,6 +8,8 @@ export default {
      */
     addPost: function(post) {
         return axios.post( CONFIG.API_URL + '/post', {
+            draftID: post.draftID,
+            postID: post.postID,
             title: post.title,
             tags: post.tags,
             content: post.content,
@@ -20,7 +22,8 @@ export default {
      * API:         /api/v1/post/:postID
      */
     updatePost: function(post) {
-        return axios.put( CONFIG.API_URL + '/post/' + post.id, {
+        return axios.put( CONFIG.API_URL + '/post/' + post.postID, {
+            draftID: post.draftID,
             title: post.title,
             tags: post.tags,
             content: post.content,
@@ -39,10 +42,33 @@ export default {
     /**
      * Delete a post
      * Method:      DELETE
-     * API:         /api/v1/post
+     * API:         /api/v1/post/:draftID
      */
     deletePost: function(postID) {
         return axios.delete( CONFIG.API_URL + '/post/' + postID );
     },
 
+    /**
+     * Auto save
+     * Method:      POST
+     * API:         /api/v1/autosave
+     */
+    autosave: function(post) {
+        return axios.post( CONFIG.API_URL + '/post/autosave', {
+            draftID: post.draftID,
+            postID: post.postID,
+            title: post.title,
+            content: post.content,
+            tags: post.tags,
+        })
+    },
+
+    /**
+     * Delete a draft
+     * Method:      DELETE
+     * API:         /api/v1/draft/:draftID
+     */
+    deleteDraft: function(draftID) {
+        return axios.delete( CONFIG.API_URL + '/draft/' + draftID );
+    },
 }

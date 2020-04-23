@@ -10,7 +10,7 @@
             <el-pagination 
                 layout='prev, pager, next' 
                 :total='total' 
-                :page-size='pageSize'
+                :page-size='limit'
                 :hide-on-single-page='true' 
                 @current-change='handleCurrentChange'
             >
@@ -34,47 +34,53 @@ export default {
             loading: false,
             error: null,
             
-            pageSize: 10, 
-            total: 0,
-            currentPage: 1,
+            limit: 12,  // Limit when load posts. 
+            offset: 0,   // Offset when load posts.
+            total: 0,  
         }
     },
 
     created() {
-        this.getPosts()
-    },
+        let vm = this;
 
-    watch: {
-        // Execute getPosts method once route changed.
-        '$route': 'getPosts'
+        // Load posts
+        let params = {
+            limit: vm.limit,
+            offset: vm.offset,
+        };
+        vm.loadPosts(params);
+
     },
 
     methods: {
         /**
-         * Load the posts
+         * Load posts
          */
-        getPosts() {
+        loadPosts(params) {
             let vm = this;
-            let offset = (this.currentPage - 1) * this.pageSize;
-
-            PostAPI.getPosts( {
-                params: {
-                    limit: vm.pageSize,
-                    offset: offset,
-                }
-            } ).then( (response) => {
+            PostAPI.getPosts({
+                params: params,
+            }).then((response) => {
                 let data = response.data;
                 vm.posts = data.posts;
-                vm.offset = data.posts.length;
-            } ).catch( (error) => {
-                vm.posts = [];
+                vm.offset += data.posts.length;
+                vm.total = data.total;
+            }).catch((error) => {
                 console.log(error);
-            } );
+            })
         },
-        handleCurrentChange(val) {
-            this.currentPage = val;
-            this.getPosts();
-        }
+
+        /**
+         * Handle current page change
+         */
+        handleCurrentChange(current) {
+            let params = {
+                limit: this.limit,
+                offset: (current - 1) * this.limit,
+            };
+
+            this.loadPosts(params);
+        },
     }
 
 }

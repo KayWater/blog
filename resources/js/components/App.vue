@@ -8,12 +8,11 @@
 
 <script>
 import Navigation from './global/Navigation.vue';
-import LoginModal from './auth/LoginModal.vue';
+//import LoginModal from './auth/LoginModal.vue';
 
 export default {
     components: {
         Navigation,
-        LoginModal,
     },
 
     data() {

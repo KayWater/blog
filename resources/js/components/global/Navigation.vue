@@ -22,7 +22,7 @@
                     type='submit'>Search</button>
                 </form>
 
-                <ul class='navbar-nav ml-auto'>
+                <ul class='navbar-nav ml-auto' @command="handleCommand">
                     <template v-if="isLogined && me">
                         <li class="nav-item">
                             <el-dropdown>
@@ -30,12 +30,10 @@
                                     {{ me.name }}<i class='el-icon-arrow-down el-icon--right'></i>
                                 </span>
                                 <el-dropdown-menu slot='dropdown'>
-                                    <el-dropdown-item>
-                                        <router-link class='nav-link' to='/console'>管理后台</router-link>
-                                    </el-dropdown-item>
-                                    <el-dropdown-item>
-                                        <el-button type='text' @click='logout'>注销</el-button>
-                                    </el-dropdown-item>
+                                    <template v-if="me.is_admin == 1">
+                                        <el-dropdown-item @click.native="$router.push('/console')">管理后台</el-dropdown-item>
+                                    </template>
+                                    <el-dropdown-item @click.native="logout">注销</el-dropdown-item>
                                 </el-dropdown-menu>
                             </el-dropdown>
                         </li>
@@ -80,6 +78,13 @@ export default {
     },
 
      methods: {
+         /**
+          * Handle command
+          */
+         handleCommand(command) {
+             command();
+         },
+
         /**
          * Logout
          */
@@ -88,7 +93,7 @@ export default {
             this.$store.dispatch('auth/logout')
             .then((response) => {
                 // Redirect to home page after logout;
-                this.$router.push({name: 'home'}).then((onComplete) => {
+                this.$router.push('/').then((onComplete) => {
                     
                 }).catch((error) => {
                     if (error.name === "NavigationDuplicated") {
