@@ -40,6 +40,15 @@ export default {
     },
 
     /**
+     * Get post
+     * Method:      GET
+     * API:         /api/v1/post/:id
+     */
+    getPost: function(id) {
+        return axios.get( CONFIG.API_URL + '/post/' + id );
+    },
+
+    /**
      * Delete a post
      * Method:      DELETE
      * API:         /api/v1/post/:draftID

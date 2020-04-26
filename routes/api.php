@@ -56,6 +56,15 @@ Route::group(['prefix' => 'v1'], function() {
      */
     Route::get('/posts', 'Api\PostController@getPosts');
 
+    /**
+     * Get post
+     * URL:             /api/v1/post/{id}
+     * Controller:      Api\PostController@getPost
+     * Method:          GET
+     * Description:     Get Post
+     */
+    Route::get('/post/{id}', 'Api\PostController@getPost');
+
 });
 
 Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function() {

@@ -122,7 +122,7 @@ class PostController extends Controller
     }
 
     /**
-     * Get post (pagination)
+     * Get posts (pagination)
      * @param   \Illuminate\Http\Request
      * @return  Response
      */
@@ -143,6 +143,23 @@ class PostController extends Controller
         return response()->json([
             'posts' => $posts,
             'total' => $total,
+        ]);
+    }
+
+    /**
+     * Get post
+     * 
+     * @param   \Illuminate\Http\Request $request
+     * @param   Integer $id
+     * @return  Response
+     */
+    public function getPost(Request $request, $id)
+    {
+        $post = Post::with(['user:id,name', 'tags:tags.id,name'])
+            ->findOrFail($id);
+
+        return response()->json([
+            'post' => $post,
         ]);
     }
 

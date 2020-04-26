@@ -20,6 +20,11 @@ export default new VueRouter({
                     path: 'posts',
                     component: Vue.component('PostList', require('./components/posts/PostList.vue').default),
                 },
+                {
+                    path: 'post/:id',
+                    component: Vue.component('PostShow', require('./components/posts/PostShow.vue').default),
+                    props: true,
+                },
             ],
         },
         {
