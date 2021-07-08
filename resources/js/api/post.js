@@ -48,13 +48,8 @@ export default {
         return axios.get( CONFIG.API_URL + '/post/' + id );
     },
 
-    /**
-     * Delete a post
-     * Method:      DELETE
-     * API:         /api/v1/post/:draftID
-     */
-    deletePost: function(postID) {
-        return axios.delete( CONFIG.API_URL + '/post/' + postID );
+    deletePost: function(id) {
+        return axios.delete( CONFIG.API_URL + '/posts/' + id );
     },
 
     /**

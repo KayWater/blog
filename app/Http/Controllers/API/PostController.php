@@ -170,9 +170,9 @@ class PostController extends Controller
      * @param   Integer $postID
      * @return  Response
      */
-    public function deletePost(Request $request, $postID)
+    public function deletePost(Request $request, $id)
     {
-        $post = Post::find($postID);
+        $post = Post::find($id);
 
         // Whether the current user can delete the post
         $this->authorize('delete', $post);

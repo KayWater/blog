@@ -10,10 +10,12 @@ Vue.use(Vuex)
 
 import { user } from './modules/user.js';
 import { auth } from './modules/auth.js';
+import { post } from './modules/post.js';
 
 export default new Vuex.Store({
     modules: {
         user,
         auth,
+        post
     }
 })

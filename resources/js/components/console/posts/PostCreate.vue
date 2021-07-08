@@ -1,9 +1,6 @@
 <template>
     <div class='container-fluid'>
         <nav class='navbar navbar-light justify-content-between '>
-            <div>
-                <a class='navbar-brand d-flex' href='/'>首页</a>
-            </div>
             <div class='navbar-title'>
                 <p class='d-inline'>写文章</p>
                 <p class='d-inline editor-status' v-bind:class="[editorInBusyStatus ? 'editor-status-busy' : '']">{{ editorStatusMessage }}</p>
@@ -28,8 +25,6 @@
                     </div>
                 </el-form-item>
                 <el-form-item prop='content'>
-                    <!-- <el-input type='textarea' id="editor" v-model="postForm.content"
-                        placeholder="请输入内容"></el-input> -->
                     <div class="document-editor">
                         <div class="toolbar-container"></div>
                         <div class="content-container">
@@ -294,47 +289,22 @@ export default {
          */
         createEditor() {
             let vm = this;
+            let toolbarItems = [
+                'heading', '|', 
+                'fontSize', 'fontFamily','fontBackgroundColor', 'fontColor', '|', 
+                'bold', 'italic', 'underline', 'strikethrough', 'highlight', '|',
+                'alignment', 'indent', 'outdent', '|',
+                'numberedList', 'bulletedList', '|',
+                'link', 'blockQuote', 'imageUpload', 'insertTable', 'mediaEmbed', '|',
+                'code', 'codeBlock', 'subscript', 'superscript', '|',
+                'undo', 'redo'
+            ];
 
             DecoupledDocumentEditor
                 .create( document.querySelector( '#editor' ), {
                     extraPlugins: [ customUploadAdapterPlugin ],
                     toolbar: {
-                        items: [
-                            'heading',
-                            '|',
-                            'fontSize',
-                            'fontFamily',
-                            'fontBackgroundColor',
-                            'fontColor',
-                            '|',
-                            'bold',
-                            'italic',
-                            'underline',
-                            'strikethrough',
-                            'highlight',
-                            '|',
-                            'alignment',
-                            '|',
-                            'numberedList',
-                            'bulletedList',
-                            '|',
-                            'indent',
-                            'outdent',
-                            '|',
-                            'link',
-                            'blockQuote',
-                            'imageUpload',
-                            'insertTable',
-                            'mediaEmbed',
-                            '|',
-                            'code',
-                            'codeBlock',
-                            'subscript',
-                            'superscript',
-                            '|',
-                            'undo',
-                            'redo'
-                        ]
+                        items: toolbarItems
                     },
                     autosave: {
                         waitingTime: 6000,

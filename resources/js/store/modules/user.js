@@ -1,5 +1,4 @@
 import UserAPI from '../../api/user.js';
-import { resolve } from 'url';
 
 export const user = {
     namespaced: true,
@@ -29,10 +28,10 @@ export const user = {
         loadMe({commit}) {
             return new Promise((resolve, reject) => {
                 UserAPI.getMe()
-                .then(function(response) {
+                .then((response) => {
                     commit('setMe', response.data.user);
                     resolve(response.data);
-                }).catch(function() {
+                }).catch((error) => {
                     commit('setMe', null);
                     reject(error.response.data);
                 });
@@ -45,12 +44,23 @@ export const user = {
         loadUser({commit}) {
             return new Promise((resolve, reject) => {
                 UserAPI.getUser()
-                    .then(function(response) {
+                    .then((response) => {
                         commit('setUser', response.data);
-                    }).catch(function() {
+                    }).catch((error) => {
                         commit('setUser', null);
                     })
             })
+        },
+
+        loadPosts({commit}, params) {
+            return new Promise((resolve, reject) => {
+                UserAPI.loadPosts(params)
+                    .then((response) => {
+                        resolve(response.data);
+                    }).catch((error) => {
+                        reject(error.response.data);
+                    });
+            });
         }
     },
 

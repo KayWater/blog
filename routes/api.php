@@ -122,14 +122,8 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function() {
      */
     Route::put('/post/{postID}', 'Api\PostController@updatePost');
 
-    /**
-     * Delete a post
-     * URL:             /api/v1/post/{postID}
-     * Controller:      Api\PostController@deletePost
-     * Method:          DELETE
-     * Description:     Delete a post
-     */
-    Route::delete('/post/{postID}', 'Api\PostController@deletePost');
+
+    Route::delete('/posts/{id}', 'Api\PostController@deletePost');
 
     /**
      * Delete a draft

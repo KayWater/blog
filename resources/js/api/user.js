@@ -15,13 +15,8 @@ export default {
         return axios.get(CONFIG.API_URL + '/user');
     },
 
-    /**
-     * Get posts belongs to current user
-     * Method:      GET
-     * API:         /api/v1/user/posts
-     */
-    getPosts: function(params) {
-        return axios.get( CONFIG.API_URL + '/user/posts', params );
+    loadPosts: function(params) {
+        return axios.get( CONFIG.API_URL + '/user/posts', {params: params} );
     },
 
     /**
